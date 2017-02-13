@@ -1,0 +1,15 @@
+﻿<?xml version='1.0' encoding='utf-8'?>
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="Tarea2.Properties" GeneratedClassName="Settings">
+  <Profiles />
+  <Settings>
+    <Setting Name="destino" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">C:\temp\</Value>
+    </Setting>
+    <Setting Name="json_google" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">C:\\Users\\Marcelo\\Downloads\\CICLOPE-459d8f92c94a.json</Value>
+    </Setting>
+    <Setting Name="api_ms" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">ea33dfe7de2443df83b072967aaa4d10</Value>
+    </Setting>
+  </Settings>
+</SettingsFile>
