@@ -120,6 +120,7 @@ namespace ContarPersonas
             int seconds, Action<double> progressCallback, int precision,
             string cascadeFile,bool eq, double cascadeScale = 1.07)
         {
+            Stopwatch swProcess = Stopwatch.StartNew();
             this.scaleFactor = cascadeScale;
             this.eq = eq;
             var framesToProcess = Math.Floor((end - start).TotalSeconds / seconds) + 1;
@@ -157,6 +158,7 @@ namespace ContarPersonas
                             Debug.WriteLine("query " + time.ElapsedMilliseconds + " ms");
 
                             var jpgFilename = String.Format("{0}_{1:D4}s.jpg", baseName, (int) pos.TotalSeconds);
+
                             var totalFaces = complex
                                 ? RecognizeFacesComplex(image, jpgFilename,precision)
                                 : RecognizeFaces(precision, image, cascade);
@@ -197,6 +199,7 @@ namespace ContarPersonas
                 _capture.Dispose();
                 Debug.WriteLine("Termino");
             }
+            Debug.WriteLine("El procesamiento tomo " + swProcess.ElapsedMilliseconds / 1000.0 + " s");
         }
 
   
@@ -214,6 +217,8 @@ namespace ContarPersonas
             return (this.resizeFactor == 1.0) ? image.Convert<Gray, Byte>() : image.Convert<Gray, Byte>().Resize(this.resizeFactor, Inter.Cubic) ;
         }
 
+
+
         private int RecognizeFacesComplex(Image<Bgr, byte> image, string filename, int precision )
         {
             using (var greyFrame = ConvertirGris(image))
@@ -229,8 +234,7 @@ namespace ContarPersonas
                 Size maxBodySize = new Size((int)(160 * this.resizeFactor), (int)(240 * this.resizeFactor));
 
                 // haarcascade ya esta paralelizado, no tiene sentido correrlo en paralelo
-                var haarAlt2 =
-                    new CascadeClassifier(Application.StartupPath + "/" + "haarcascade_frontalface_alt2.xml");
+                var haarAlt2 = new CascadeClassifier(Application.StartupPath + "/" + "haarcascade_frontalface_alt2.xml");
                 Rectangle[] facesAlt2 = haarAlt2.DetectMultiScale(greyFrame, this.scaleFactor, precision);
                 Array.ForEach(facesAlt2, ScaleBack);
                 haarAlt2.Dispose();
@@ -242,16 +246,11 @@ namespace ContarPersonas
                 haarDef.Dispose();*/
 
 
-                var haarProfile =
-                    new CascadeClassifier(Application.StartupPath + "/" + "haarcascade_profileface.xml");
+                var haarProfile = new CascadeClassifier(Application.StartupPath + "/" + "haarcascade_profileface.xml");
                 Rectangle[] facesProfile = haarProfile.DetectMultiScale(greyFrame, this.scaleFactor, Math.Max(precision - 1,1),
                     maxSize: maxFaceSize);
                 Array.ForEach(facesProfile, ScaleBack);
                 haarProfile.Dispose();
-
-                /*var haarEyeGlasses = new CascadeClassifier(Application.StartupPath + "/" + "haarcascade_eye_tree_eyeglasses.xml");
-                Rectangle[] facesGlasses = haarEyeGlasses.DetectMultiScale(greyFrame, scale, 1);
-                haarEyeGlasses.Dispose();*/
 
 
                 var haarUpper = new CascadeClassifier(Application.StartupPath + "/" + "haarcascade_upperbody.xml");
@@ -264,9 +263,6 @@ namespace ContarPersonas
                 Array.ForEach(facesFull, ScaleBack);
                 haarFull.Dispose();
 
-                /*var haarEye = new CascadeClassifier(Application.StartupPath + "/" + "haarcascade_eye.xml");
-                Rectangle[] facesEye = haarEye.DetectMultiScale(greyFrame, scale, 2);
-                haarEye.Dispose();*/
 
                 var mergedFaces = MergeRectangles(facesProfile.Concat(facesAlt2),0.4);
                 mergedFaces = MergeRectangles(mergedFaces, 0.4);

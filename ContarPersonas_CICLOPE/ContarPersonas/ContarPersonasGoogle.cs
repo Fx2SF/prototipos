@@ -26,7 +26,7 @@ namespace ContarPersonas
 
         private ReporteHelper reporte = null;
 
-        private double scaleFactor = 2.0;
+        private double scaleFactor;
         public bool ResizeThumbnails { get; set; } = false;
 
         public static GoogleCredential CreateCredentials()

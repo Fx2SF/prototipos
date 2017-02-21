@@ -34,7 +34,7 @@ namespace ContarPersonas
 
         private int sumFaces = 0;
         private int processedFrames = 0;
-        private double scaleFactor = 2.5;
+        private double scaleFactor ;
         public bool ResizeThumbnails { get; set; }= false;
 
 
@@ -170,7 +170,7 @@ namespace ContarPersonas
         public async Task ProcessVideoTime(string videoFileName, string reportName, TimeSpan start, TimeSpan end,
             int seconds, bool eq, Action<double> progressCallback, bool resize)
         {
-            this.scaleFactor = resize ? 2.5 : 1.0;
+            this.scaleFactor = resize ? 2.0 : 1.0;
             var framesToProcess = Math.Floor((end - start).TotalSeconds / seconds) + 1;
             int quotaTime = Properties.Settings.Default.MS_Free ? 3000 : 100;
             string directory = Path.Combine(Path.GetDirectoryName(reportName),
