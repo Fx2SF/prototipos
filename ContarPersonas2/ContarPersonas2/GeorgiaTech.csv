@@ -1,0 +1,6 @@
+Size;140;200; // ancho, alto
+Bias;0;60; // ver codigo
+Uncertain;0;0; // para masculino
+Uncertain;1;0; // para femenino
+MarginX;0; // margen ancho cara 
+MarginY;0; // margen alto cara
