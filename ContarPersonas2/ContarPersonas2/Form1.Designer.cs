@@ -173,7 +173,7 @@
             this.txtFuente.Name = "txtFuente";
             this.txtFuente.Size = new System.Drawing.Size(690, 20);
             this.txtFuente.TabIndex = 3;
-            this.txtFuente.Text = "rtsp://admin:Fx2%403391@fx2.no-ip.org:554";
+            this.txtFuente.Text = "rtsp://admin:{pass}@fx2.no-ip.org:554";
             // 
             // btConectar
             // 
