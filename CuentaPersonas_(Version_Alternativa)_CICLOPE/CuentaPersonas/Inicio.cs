@@ -89,8 +89,14 @@ namespace CuentaPersonas
         {
             InitializeComponent();
             cboxMantener.SelectedIndex = 0;
+
+
             gridA.Columns[0].Width = _gridImageSize.Width;
             gridB.Columns[0].Width = _gridImageSize.Width;
+            gridA.RowTemplate.DefaultCellStyle.Padding  = new Padding(0, 4, 0, 4);
+            gridB.RowTemplate.DefaultCellStyle.Padding = new Padding(0, 4, 0, 4);
+
+
             _maxAreaEnviada = (int) numMaxAreaScale.Value * 1000;
 
             string[] tipo = new string[] { "Horizontal", "Vertical" };
@@ -151,6 +157,8 @@ namespace CuentaPersonas
                     _cameraCapture = new VideoCapture(this.textBox1.Text.ToString());
                     gridA.Rows.Clear();
                     gridB.Rows.Clear();
+                    gridA.ClearSelection();
+                    gridB.ClearSelection();
 
                     _blobDetector = new CvBlobDetector();
                     _tracker = new CvTracks();
@@ -354,6 +362,7 @@ namespace CuentaPersonas
                 this.Invoke(new Action(() =>
                 {
                     grid.Rows.Add(copy.ToBitmap(), "");
+                    grid.Rows[0].Selected = false;
 
                 }));
             }
