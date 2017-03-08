@@ -73,6 +73,8 @@ namespace CuentaPersonas
 
         private bool parar;
         private bool api;
+        private int _maxAreaEnviada = 1000000;
+
         CognitiveService cog;
 
         public Inicio()
@@ -120,6 +122,7 @@ namespace CuentaPersonas
             richTextBox1.Enabled = false;
             cog = new CognitiveService();
 
+
             textBox1.Text = "";
 
             // ---------------------
@@ -145,6 +148,7 @@ namespace CuentaPersonas
         {
             try
             {
+                cog.MantenerImagenes = ckMantenerImg.Checked;
                 if (textBox1.Text.ToString().CompareTo("") != 0)
                 {
                     _cameraCapture = new VideoCapture(this.textBox1.Text.ToString());
@@ -316,6 +320,31 @@ namespace CuentaPersonas
             }
         }
 
+        private Image<Bgr, byte> Escalar(Mat mat)
+        {
+            int area = mat.Width * mat.Height;
+            int maxArea150 = (int)(_maxAreaEnviada / (1.5 * 1.5));
+            int maxArea200 = _maxAreaEnviada / 4;
+            double factor;
+            if (area < maxArea200)
+            {
+                factor = 2.0;
+            }
+            else if (area < maxArea150)
+            {
+                factor = 1.5;
+            }
+            else
+            {
+                factor = 1.0;
+            }
+            using (var img = mat.ToImage<Bgr, byte>())
+            {
+                return img.Resize(factor, Inter.Cubic);
+            }
+                
+        }
+
         void ProcessFrame(object sender, EventArgs e)
         {
             if (_cameraCapture != null && _cameraCapture.Ptr != IntPtr.Zero)
@@ -436,15 +465,21 @@ namespace CuentaPersonas
 
                                             Thread.CurrentThread.IsBackground = true;
 
-                                           // Rectangle r = new Rectangle(b.BoundingBox.X - 50, b.BoundingBox.Y - 50, b.BoundingBox.Width + 100, b.BoundingBox.Height + 50);
-                                            Mat minimat2 = new Mat(clone, b.BoundingBox);
+                                            // Rectangle r = new Rectangle(b.BoundingBox.X - 50, b.BoundingBox.Y - 50, b.BoundingBox.Width + 100, b.BoundingBox.Height + 50);
+                                            using (Mat minimat2 = new Mat(clone, b.BoundingBox))
+                                            using (var resized = Escalar(minimat2))
+                                            {
 
-                                            string directory = AppDomain.CurrentDomain.BaseDirectory;
-                                            string date = DateTime.Now.ToString("dd-MM-yyyy-hh-mm-ss");
-                                            minimat2.Save(directory + date +".jpg");
+                                                string directory = AppDomain.CurrentDomain.BaseDirectory;
+                                                string date = DateTime.Now.ToString("dd-MM-yyyy-hh-mm-ss");
+                                                resized.Mat.Save(directory + date + ".jpg");
+ 
+                                                apiCall(_contB, date);
 
-                                            //Image<Bgr, byte> img = minimat2.ToImage<Bgr, byte>();
-                                            apiCall(_contB, date);
+                                            }
+
+
+
 
                                         }).Start();
                                     }
@@ -516,16 +551,19 @@ namespace CuentaPersonas
                                         {
                                             CheckForIllegalCrossThreadCalls = false;
                                             Thread.CurrentThread.IsBackground = true;
-
-                                           // Rectangle r = new Rectangle(b.BoundingBox.X - 50, b.BoundingBox.Y - 50, b.BoundingBox.Width + 100, b.BoundingBox.Height + 50);
-                                            Mat minimat2 = new Mat(clone, b.BoundingBox);
-
-                                            string directory = AppDomain.CurrentDomain.BaseDirectory;
                                             string date = DateTime.Now.ToString("dd-MM-yyyy-hh-mm-ss");
-                                            minimat2.Save(directory + date + ".jpg");
+                                            // Rectangle r = new Rectangle(b.BoundingBox.X - 50, b.BoundingBox.Y - 50, b.BoundingBox.Width + 100, b.BoundingBox.Height + 50);
+                                            using (Mat minimat2 = new Mat(clone, b.BoundingBox))
+                                            {
+                                                using (var resized = Escalar(minimat2))
+                                                {
 
-                                            //Image<Bgr, byte> img = minimat2.ToImage<Bgr, byte>();
-                                            apiCall(_contB, date);
+                                                    string directory = AppDomain.CurrentDomain.BaseDirectory;
+
+                                                    resized.Mat.Save(directory + date + ".jpg");
+                                                    apiCall(_contB, date);
+                                                }
+                                            }
 
                                         }).Start();
                                     }
@@ -684,6 +722,11 @@ namespace CuentaPersonas
             {
                 richTextBox1.Enabled = false;
             }
+        }
+
+        private void numMaxAreaScale_ValueChanged(object sender, EventArgs e)
+        {
+            _maxAreaEnviada = (int)(numMaxAreaScale.Value * 1000000);
         }
     }
 }

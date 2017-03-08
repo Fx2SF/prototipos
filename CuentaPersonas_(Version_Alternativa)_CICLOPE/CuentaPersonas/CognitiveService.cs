@@ -12,10 +12,12 @@ namespace CuentaPersonas
 
         // creo un cliente de la API (usando una API Key)
         private VisionServiceClient visionClient = null;
+        public bool MantenerImagenes { get; set; } = false;
 
-        public CognitiveService() {
+        public CognitiveService()
+        {
 
-            string api = "8b2d73635e3849efac561f4e8c8290be";
+            string api = "912104c5a65c444089b5ed0e6d358dff";//"8b2d73635e3849efac561f4e8c8290be";
             visionClient = new VisionServiceClient(api);
 
         }
@@ -61,7 +63,11 @@ namespace CuentaPersonas
 
             AnalysisResult analisis = await GetImageAnalysis(date);
             string directory = AppDomain.CurrentDomain.BaseDirectory;
-            File.Delete(directory + date + ".jpg");
+            if (!MantenerImagenes)
+            {
+                File.Delete(directory + date + ".jpg");
+            }
+
 
             return LogAnalysisResult(analisis);
 

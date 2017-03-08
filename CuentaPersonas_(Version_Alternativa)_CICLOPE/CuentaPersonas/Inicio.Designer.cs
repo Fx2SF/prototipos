@@ -100,6 +100,9 @@
             this.radioButtonMOG2 = new System.Windows.Forms.RadioButton();
             this.radioButtonMOG = new System.Windows.Forms.RadioButton();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.groupBox14 = new System.Windows.Forms.GroupBox();
+            this.button3 = new System.Windows.Forms.Button();
+            this.comboBox1 = new System.Windows.Forms.ComboBox();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
             this.textBoxA1max = new System.Windows.Forms.TextBox();
             this.textBoxA1min = new System.Windows.Forms.TextBox();
@@ -117,19 +120,20 @@
             this.textY1 = new System.Windows.Forms.TextBox();
             this.textX2 = new System.Windows.Forms.TextBox();
             this.textX1 = new System.Windows.Forms.TextBox();
+            this.tabPage5 = new System.Windows.Forms.TabPage();
+            this.groupBox15 = new System.Windows.Forms.GroupBox();
+            this.label31 = new System.Windows.Forms.Label();
+            this.numMaxAreaScale = new System.Windows.Forms.NumericUpDown();
+            this.label30 = new System.Windows.Forms.Label();
+            this.richTextBox1 = new System.Windows.Forms.RichTextBox();
+            this.checkBox1 = new System.Windows.Forms.CheckBox();
             this.tabPage3 = new System.Windows.Forms.TabPage();
             this.label29 = new System.Windows.Forms.Label();
             this.label28 = new System.Windows.Forms.Label();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.imageListA = new System.Windows.Forms.ImageList(this.components);
             this.imageListB = new System.Windows.Forms.ImageList(this.components);
-            this.groupBox14 = new System.Windows.Forms.GroupBox();
-            this.comboBox1 = new System.Windows.Forms.ComboBox();
-            this.button3 = new System.Windows.Forms.Button();
-            this.tabPage5 = new System.Windows.Forms.TabPage();
-            this.groupBox15 = new System.Windows.Forms.GroupBox();
-            this.checkBox1 = new System.Windows.Forms.CheckBox();
-            this.richTextBox1 = new System.Windows.Forms.RichTextBox();
+            this.ckMantenerImg = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.imageBox1)).BeginInit();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
@@ -146,14 +150,15 @@
             this.groupBox7.SuspendLayout();
             this.groupBox6.SuspendLayout();
             this.groupBox1.SuspendLayout();
+            this.groupBox14.SuspendLayout();
             this.groupBox4.SuspendLayout();
             this.groupBox3.SuspendLayout();
             this.groupBox2.SuspendLayout();
-            this.tabPage3.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
-            this.groupBox14.SuspendLayout();
             this.tabPage5.SuspendLayout();
             this.groupBox15.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numMaxAreaScale)).BeginInit();
+            this.tabPage3.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
             // imageBox1
@@ -161,6 +166,7 @@
             this.imageBox1.Location = new System.Drawing.Point(16, 54);
             this.imageBox1.Name = "imageBox1";
             this.imageBox1.Size = new System.Drawing.Size(787, 402);
+            this.imageBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.imageBox1.TabIndex = 2;
             this.imageBox1.TabStop = false;
             // 
@@ -852,6 +858,36 @@
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "General";
             // 
+            // groupBox14
+            // 
+            this.groupBox14.Controls.Add(this.button3);
+            this.groupBox14.Controls.Add(this.comboBox1);
+            this.groupBox14.Location = new System.Drawing.Point(6, 320);
+            this.groupBox14.Name = "groupBox14";
+            this.groupBox14.Size = new System.Drawing.Size(255, 69);
+            this.groupBox14.TabIndex = 3;
+            this.groupBox14.TabStop = false;
+            this.groupBox14.Text = "Presets";
+            // 
+            // button3
+            // 
+            this.button3.Location = new System.Drawing.Point(157, 30);
+            this.button3.Name = "button3";
+            this.button3.Size = new System.Drawing.Size(75, 23);
+            this.button3.TabIndex = 1;
+            this.button3.Text = "Cargar";
+            this.button3.UseVisualStyleBackColor = true;
+            this.button3.Click += new System.EventHandler(this.button3_Click);
+            // 
+            // comboBox1
+            // 
+            this.comboBox1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBox1.FormattingEnabled = true;
+            this.comboBox1.Location = new System.Drawing.Point(6, 32);
+            this.comboBox1.Name = "comboBox1";
+            this.comboBox1.Size = new System.Drawing.Size(121, 21);
+            this.comboBox1.TabIndex = 0;
+            // 
             // groupBox4
             // 
             this.groupBox4.Controls.Add(this.textBoxA1max);
@@ -1011,6 +1047,82 @@
             this.textX1.Size = new System.Drawing.Size(41, 20);
             this.textX1.TabIndex = 0;
             // 
+            // tabPage5
+            // 
+            this.tabPage5.Controls.Add(this.groupBox15);
+            this.tabPage5.Location = new System.Drawing.Point(4, 22);
+            this.tabPage5.Name = "tabPage5";
+            this.tabPage5.Size = new System.Drawing.Size(1211, 462);
+            this.tabPage5.TabIndex = 4;
+            this.tabPage5.Text = "Herramientas";
+            this.tabPage5.UseVisualStyleBackColor = true;
+            // 
+            // groupBox15
+            // 
+            this.groupBox15.Controls.Add(this.ckMantenerImg);
+            this.groupBox15.Controls.Add(this.label31);
+            this.groupBox15.Controls.Add(this.numMaxAreaScale);
+            this.groupBox15.Controls.Add(this.label30);
+            this.groupBox15.Controls.Add(this.richTextBox1);
+            this.groupBox15.Controls.Add(this.checkBox1);
+            this.groupBox15.Location = new System.Drawing.Point(27, 29);
+            this.groupBox15.Name = "groupBox15";
+            this.groupBox15.Size = new System.Drawing.Size(312, 347);
+            this.groupBox15.TabIndex = 0;
+            this.groupBox15.TabStop = false;
+            this.groupBox15.Text = "Gender/Age";
+            // 
+            // label31
+            // 
+            this.label31.AutoSize = true;
+            this.label31.Location = new System.Drawing.Point(207, 65);
+            this.label31.Name = "label31";
+            this.label31.Size = new System.Drawing.Size(38, 13);
+            this.label31.TabIndex = 4;
+            this.label31.Text = "MPixel";
+            // 
+            // numMaxAreaScale
+            // 
+            this.numMaxAreaScale.DecimalPlaces = 1;
+            this.numMaxAreaScale.Location = new System.Drawing.Point(146, 63);
+            this.numMaxAreaScale.Name = "numMaxAreaScale";
+            this.numMaxAreaScale.Size = new System.Drawing.Size(46, 20);
+            this.numMaxAreaScale.TabIndex = 3;
+            this.numMaxAreaScale.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.numMaxAreaScale.ValueChanged += new System.EventHandler(this.numMaxAreaScale_ValueChanged);
+            // 
+            // label30
+            // 
+            this.label30.AutoSize = true;
+            this.label30.Location = new System.Drawing.Point(19, 65);
+            this.label30.Name = "label30";
+            this.label30.Size = new System.Drawing.Size(99, 13);
+            this.label30.TabIndex = 2;
+            this.label30.Text = "Escalar sin superar:";
+            // 
+            // richTextBox1
+            // 
+            this.richTextBox1.Location = new System.Drawing.Point(22, 95);
+            this.richTextBox1.Name = "richTextBox1";
+            this.richTextBox1.Size = new System.Drawing.Size(260, 233);
+            this.richTextBox1.TabIndex = 1;
+            this.richTextBox1.Text = "";
+            // 
+            // checkBox1
+            // 
+            this.checkBox1.AutoSize = true;
+            this.checkBox1.Location = new System.Drawing.Point(22, 29);
+            this.checkBox1.Name = "checkBox1";
+            this.checkBox1.Size = new System.Drawing.Size(59, 17);
+            this.checkBox1.TabIndex = 0;
+            this.checkBox1.Text = "Activar";
+            this.checkBox1.UseVisualStyleBackColor = true;
+            this.checkBox1.CheckedChanged += new System.EventHandler(this.checkBox1_CheckedChanged);
+            // 
             // tabPage3
             // 
             this.tabPage3.Controls.Add(this.label29);
@@ -1063,75 +1175,15 @@
             this.imageListB.ImageSize = new System.Drawing.Size(16, 16);
             this.imageListB.TransparentColor = System.Drawing.Color.Transparent;
             // 
-            // groupBox14
+            // ckMantenerImg
             // 
-            this.groupBox14.Controls.Add(this.button3);
-            this.groupBox14.Controls.Add(this.comboBox1);
-            this.groupBox14.Location = new System.Drawing.Point(6, 320);
-            this.groupBox14.Name = "groupBox14";
-            this.groupBox14.Size = new System.Drawing.Size(255, 69);
-            this.groupBox14.TabIndex = 3;
-            this.groupBox14.TabStop = false;
-            this.groupBox14.Text = "Presets";
-            // 
-            // comboBox1
-            // 
-            this.comboBox1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.comboBox1.FormattingEnabled = true;
-            this.comboBox1.Location = new System.Drawing.Point(6, 32);
-            this.comboBox1.Name = "comboBox1";
-            this.comboBox1.Size = new System.Drawing.Size(121, 21);
-            this.comboBox1.TabIndex = 0;
-            // 
-            // button3
-            // 
-            this.button3.Location = new System.Drawing.Point(157, 30);
-            this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(75, 23);
-            this.button3.TabIndex = 1;
-            this.button3.Text = "Cargar";
-            this.button3.UseVisualStyleBackColor = true;
-            this.button3.Click += new System.EventHandler(this.button3_Click);
-            // 
-            // tabPage5
-            // 
-            this.tabPage5.Controls.Add(this.groupBox15);
-            this.tabPage5.Location = new System.Drawing.Point(4, 22);
-            this.tabPage5.Name = "tabPage5";
-            this.tabPage5.Size = new System.Drawing.Size(1211, 462);
-            this.tabPage5.TabIndex = 4;
-            this.tabPage5.Text = "Herramientas";
-            this.tabPage5.UseVisualStyleBackColor = true;
-            // 
-            // groupBox15
-            // 
-            this.groupBox15.Controls.Add(this.richTextBox1);
-            this.groupBox15.Controls.Add(this.checkBox1);
-            this.groupBox15.Location = new System.Drawing.Point(27, 29);
-            this.groupBox15.Name = "groupBox15";
-            this.groupBox15.Size = new System.Drawing.Size(312, 347);
-            this.groupBox15.TabIndex = 0;
-            this.groupBox15.TabStop = false;
-            this.groupBox15.Text = "Gender/Age";
-            // 
-            // checkBox1
-            // 
-            this.checkBox1.AutoSize = true;
-            this.checkBox1.Location = new System.Drawing.Point(22, 45);
-            this.checkBox1.Name = "checkBox1";
-            this.checkBox1.Size = new System.Drawing.Size(59, 17);
-            this.checkBox1.TabIndex = 0;
-            this.checkBox1.Text = "Activar";
-            this.checkBox1.UseVisualStyleBackColor = true;
-            this.checkBox1.CheckedChanged += new System.EventHandler(this.checkBox1_CheckedChanged);
-            // 
-            // richTextBox1
-            // 
-            this.richTextBox1.Location = new System.Drawing.Point(22, 95);
-            this.richTextBox1.Name = "richTextBox1";
-            this.richTextBox1.Size = new System.Drawing.Size(260, 233);
-            this.richTextBox1.TabIndex = 1;
-            this.richTextBox1.Text = "";
+            this.ckMantenerImg.AutoSize = true;
+            this.ckMantenerImg.Location = new System.Drawing.Point(146, 29);
+            this.ckMantenerImg.Name = "ckMantenerImg";
+            this.ckMantenerImg.Size = new System.Drawing.Size(119, 17);
+            this.ckMantenerImg.TabIndex = 5;
+            this.ckMantenerImg.Text = "Mantener imágenes";
+            this.ckMantenerImg.UseVisualStyleBackColor = true;
             // 
             // Inicio
             // 
@@ -1166,19 +1218,20 @@
             this.groupBox6.ResumeLayout(false);
             this.groupBox6.PerformLayout();
             this.groupBox1.ResumeLayout(false);
+            this.groupBox14.ResumeLayout(false);
             this.groupBox4.ResumeLayout(false);
             this.groupBox4.PerformLayout();
             this.groupBox3.ResumeLayout(false);
             this.groupBox3.PerformLayout();
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
-            this.tabPage3.ResumeLayout(false);
-            this.tabPage3.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
-            this.groupBox14.ResumeLayout(false);
             this.tabPage5.ResumeLayout(false);
             this.groupBox15.ResumeLayout(false);
             this.groupBox15.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numMaxAreaScale)).EndInit();
+            this.tabPage3.ResumeLayout(false);
+            this.tabPage3.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -1286,6 +1339,10 @@
         private System.Windows.Forms.GroupBox groupBox15;
         private System.Windows.Forms.RichTextBox richTextBox1;
         private System.Windows.Forms.CheckBox checkBox1;
+        private System.Windows.Forms.Label label31;
+        private System.Windows.Forms.NumericUpDown numMaxAreaScale;
+        private System.Windows.Forms.Label label30;
+        private System.Windows.Forms.CheckBox ckMantenerImg;
     }
 }
 
