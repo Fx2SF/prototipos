@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 using System.Windows.Forms;
 
@@ -73,13 +74,14 @@ namespace CuentaPersonas
 
         private bool parar;
         private bool api;
-        private int _maxAreaEnviada = 1000000;
+        private int _maxAreaEnviada;
 
         CognitiveService cog;
 
         public Inicio()
         {
             InitializeComponent();
+            _maxAreaEnviada = (int) numMaxAreaScale.Value * 1000;
 
             string[] tipo = new string[] { "Horizontal", "Vertical" };
             comboBox1.Items.AddRange(tipo);
@@ -118,7 +120,7 @@ namespace CuentaPersonas
             comboBox1.Text = "Vertical";
 
             parar = false;
-            checkBox1.Checked = false;
+            checkBox1.Checked = true;
             richTextBox1.Enabled = false;
             cog = new CognitiveService();
 
@@ -127,17 +129,17 @@ namespace CuentaPersonas
 
             // ---------------------
 
-            imageListA.ImageSize = new Size(120, 120);
+            imageListA.ImageSize = new Size(75, 125);
             imageListA.ColorDepth = ColorDepth.Depth32Bit;
             listViewA.View = View.LargeIcon;
-            ListViewItem_SetSpacing(listViewA, 120 + 16, 120 + 16);
+            ListViewItem_SetSpacing(listViewA, 125 + 4, 125 + 4);
 
             // ---------------------
 
-            imageListB.ImageSize = new Size(120, 120);
+            imageListB.ImageSize = new Size(75, 125);
             imageListB.ColorDepth = ColorDepth.Depth32Bit;
             listViewB.View = View.LargeIcon;
-            ListViewItem_SetSpacing(listViewB, 120 + 16, 120 + 16);
+            ListViewItem_SetSpacing(listViewB, 125 + 4, 125 + 4);
 
             // ---------------------------------------
 
@@ -320,12 +322,13 @@ namespace CuentaPersonas
             }
         }
 
-        private Image<Bgr, byte> Escalar(Mat mat)
+        private Image<Bgr, byte> Escalar(Mat mat, out double factor)
         {
             int area = mat.Width * mat.Height;
             int maxArea150 = (int)(_maxAreaEnviada / (1.5 * 1.5));
             int maxArea200 = _maxAreaEnviada / 4;
-            double factor;
+            factor = 1.0;
+            var inter = Inter.Linear;
             if (area < maxArea200)
             {
                 factor = 2.0;
@@ -333,14 +336,15 @@ namespace CuentaPersonas
             else if (area < maxArea150)
             {
                 factor = 1.5;
+                inter = Inter.Cubic;;
             }
             else
             {
-                factor = 1.0;
+                return mat.ToImage<Bgr, byte>();
             }
             using (var img = mat.ToImage<Bgr, byte>())
             {
-                return img.Resize(factor, Inter.Cubic);
+                return img.Resize(factor, inter);
             }
                 
         }
@@ -443,46 +447,7 @@ namespace CuentaPersonas
 
                                     // imagenes
 
-                                    Mat minimat = new Mat(clone, b.BoundingBox);
-
-                                    imageListB.Images.Add(minimat.Bitmap);
-                                    listViewB.LargeImageList = imageListB;
-                                    listViewB.Clear();
-
-                                    for (int i = 0; i < imageListB.Images.Count; i++)
-                                    {
-                                        ListViewItem lvi = new ListViewItem();
-                                        lvi.ImageIndex = i;
-                                        listViewB.Items.Add(lvi);
-                                    }
-                                    listViewB.EnsureVisible(listViewB.Items.Count - 1);
-
-                                    if (api)
-                                    {
-                                        new Thread(() =>
-                                        {
-                                            CheckForIllegalCrossThreadCalls = false;
-
-                                            Thread.CurrentThread.IsBackground = true;
-
-                                            // Rectangle r = new Rectangle(b.BoundingBox.X - 50, b.BoundingBox.Y - 50, b.BoundingBox.Width + 100, b.BoundingBox.Height + 50);
-                                            using (Mat minimat2 = new Mat(clone, b.BoundingBox))
-                                            using (var resized = Escalar(minimat2))
-                                            {
-
-                                                string directory = AppDomain.CurrentDomain.BaseDirectory;
-                                                string date = DateTime.Now.ToString("dd-MM-yyyy-hh-mm-ss");
-                                                resized.Mat.Save(directory + date + ".jpg");
- 
-                                                apiCall(_contB, date);
-
-                                            }
-
-
-
-
-                                        }).Start();
-                                    }
+                                  ProcesarDeteccion(clone,b);
                                 }
 
                             }
@@ -505,6 +470,7 @@ namespace CuentaPersonas
                                     Mat minimat = new Mat(clone, b.BoundingBox);
 
                                     imageListA.Images.Add(minimat.Bitmap);
+
                                     listViewA.LargeImageList = imageListA;
                                     listViewA.Clear();
 
@@ -514,7 +480,8 @@ namespace CuentaPersonas
                                         lvi.ImageIndex = i;
                                         listViewA.Items.Add(lvi);
                                     }
-                                    listViewA.EnsureVisible(listViewA.Items.Count - 1);
+                                    var lastItem = listViewA.Items.Count - 1;
+                                    listViewA.EnsureVisible(lastItem);
                                 }
 
                                 // B
@@ -529,44 +496,7 @@ namespace CuentaPersonas
                                     _contB++;
                                     labelSalieron.Text = "Salieron " + _contB.ToString();
 
-                                    // imagenes
-
-                                    Mat minimat = new Mat(clone, b.BoundingBox);
-
-                                    imageListB.Images.Add(minimat.Bitmap);
-                                    listViewB.LargeImageList = imageListB;
-                                    listViewB.Clear();
-
-                                    for (int i = 0; i < imageListB.Images.Count; i++)
-                                    {
-                                        ListViewItem lvi = new ListViewItem();
-                                        lvi.ImageIndex = i;
-                                        listViewB.Items.Add(lvi);
-                                    }
-                                    listViewB.EnsureVisible(listViewB.Items.Count - 1);
-
-                                    if (api)
-                                    {
-                                        new Thread(() =>
-                                        {
-                                            CheckForIllegalCrossThreadCalls = false;
-                                            Thread.CurrentThread.IsBackground = true;
-                                            string date = DateTime.Now.ToString("dd-MM-yyyy-hh-mm-ss");
-                                            // Rectangle r = new Rectangle(b.BoundingBox.X - 50, b.BoundingBox.Y - 50, b.BoundingBox.Width + 100, b.BoundingBox.Height + 50);
-                                            using (Mat minimat2 = new Mat(clone, b.BoundingBox))
-                                            {
-                                                using (var resized = Escalar(minimat2))
-                                                {
-
-                                                    string directory = AppDomain.CurrentDomain.BaseDirectory;
-
-                                                    resized.Mat.Save(directory + date + ".jpg");
-                                                    apiCall(_contB, date);
-                                                }
-                                            }
-
-                                        }).Start();
-                                    }
+                                    ProcesarDeteccion(clone, b);
                                 }
                             }
                         }
@@ -580,7 +510,62 @@ namespace CuentaPersonas
                     imageBox2.Image = forgroundMask;
                 }
             }
-        }// ProcessFrame
+        }
+
+        private void ProcesarDeteccion(Mat clone, CvTrack b)
+        {
+            // imagenes
+
+            Mat minimat = new Mat(clone, b.BoundingBox);
+            var bmp = minimat.ToImage<Bgr, byte>().ToBitmap();
+            imageListB.Images.Add(imageListB.Images.Count.ToString(), bmp);
+            listViewB.LargeImageList = imageListB;
+            listViewB.Clear();
+
+            for (int i = 0; i < imageListB.Images.Count; i++)
+            {
+                ListViewItem lvi = new ListViewItem();
+                lvi.ImageKey = i.ToString();
+                listViewB.Items.Add(lvi);
+            }
+            var lastItem = imageListB.Images.Count - 1;
+            listViewB.EnsureVisible(lastItem);
+
+            if (api)
+            {
+                new Thread(() =>
+                {
+                    CheckForIllegalCrossThreadCalls = false;
+                    Thread.CurrentThread.IsBackground = true;
+                    string date = DateTime.Now.ToString("dd-MM-yyyy-hh-mm-ss");
+                    // Rectangle r = new Rectangle(b.BoundingBox.X - 50, b.BoundingBox.Y - 50, b.BoundingBox.Width + 100, b.BoundingBox.Height + 50);
+                    using (Mat minimat2 = new Mat(clone, b.BoundingBox))
+                    {
+                        double factor;
+                        using (var resized = Escalar(minimat2, out factor))
+                        {
+                            string directory = AppDomain.CurrentDomain.BaseDirectory;
+
+                            try
+                            {
+                                resized.Mat.Save(directory + date + ".jpg");
+                                apiCall(_contB, date, bmp, factor, listViewB, lastItem);
+                            }
+                            catch (Exception ex)
+                            {
+
+                                Debug.WriteLine(ex);
+                            }
+                        }
+                    }
+                }).Start();
+            }
+        }
+
+// ProcessFrame
+
+
+
 
         private void radioButtonMOG_CheckedChanged(object sender, EventArgs e)
         {
@@ -667,11 +652,35 @@ namespace CuentaPersonas
             parar = false;
         }
 
-        private async void apiCall(int cont, string date)
+        private async void apiCall(int cont, string date,Bitmap bmp,double scale,ListView listView,int imgIdx)
         {
 
-            string res = await cog.DoWork(date);
+            var analisis = await cog.DoWork(date,bmp,scale);
+            string res = cog.LogAnalysisResult(analisis);
             richTextBox1.Text = richTextBox1.Text + cont.ToString() + " : " + res + "\n";
+            cog.DrawFaceResult(bmp, analisis, scale);
+            try
+            {
+                listView.BeginUpdate();
+                var key = imgIdx.ToString();
+                var idx = listView.LargeImageList.Images.IndexOfKey(key);
+                if (idx > -1)
+                {
+                    var lvi = listView.Items[imgIdx];
+                    listView.Items.RemoveAt(imgIdx);
+                    listView.LargeImageList.Images.RemoveAt(idx);
+                    listView.LargeImageList.Images.Add(key, bmp);
+                    listView.Items.Insert(imgIdx, lvi);
+                    listView.Items[imgIdx].Text = res;
+                }
+
+                listView.EndUpdate();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.ToString());
+            }
+            //listViewB.Refresh();
 
         }
 
@@ -726,7 +735,12 @@ namespace CuentaPersonas
 
         private void numMaxAreaScale_ValueChanged(object sender, EventArgs e)
         {
-            _maxAreaEnviada = (int)(numMaxAreaScale.Value * 1000000);
+            _maxAreaEnviada = (int)(numMaxAreaScale.Value * 1000);
+        }
+
+        private void checkBox1_CheckedChanged_1(object sender, EventArgs e)
+        {
+            api = checkBox1.Checked;
         }
     }
 }

@@ -126,7 +126,6 @@
             this.numMaxAreaScale = new System.Windows.Forms.NumericUpDown();
             this.label30 = new System.Windows.Forms.Label();
             this.richTextBox1 = new System.Windows.Forms.RichTextBox();
-            this.checkBox1 = new System.Windows.Forms.CheckBox();
             this.tabPage3 = new System.Windows.Forms.TabPage();
             this.label29 = new System.Windows.Forms.Label();
             this.label28 = new System.Windows.Forms.Label();
@@ -134,6 +133,7 @@
             this.imageListA = new System.Windows.Forms.ImageList(this.components);
             this.imageListB = new System.Windows.Forms.ImageList(this.components);
             this.ckMantenerImg = new System.Windows.Forms.CheckBox();
+            this.checkBox1 = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.imageBox1)).BeginInit();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
@@ -163,6 +163,10 @@
             // 
             // imageBox1
             // 
+            this.imageBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.imageBox1.FunctionalMode = Emgu.CV.UI.ImageBox.FunctionalModeOption.RightClickMenu;
             this.imageBox1.Location = new System.Drawing.Point(16, 54);
             this.imageBox1.Name = "imageBox1";
             this.imageBox1.Size = new System.Drawing.Size(787, 402);
@@ -172,6 +176,9 @@
             // 
             // tabControl1
             // 
+            this.tabControl1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.tabControl1.Controls.Add(this.tabPage1);
             this.tabControl1.Controls.Add(this.tabPage4);
             this.tabControl1.Controls.Add(this.tabPage2);
@@ -185,6 +192,7 @@
             // 
             // tabPage1
             // 
+            this.tabPage1.Controls.Add(this.checkBox1);
             this.tabPage1.Controls.Add(this.buttonComenzar);
             this.tabPage1.Controls.Add(this.buttonParar);
             this.tabPage1.Controls.Add(this.listViewB);
@@ -205,6 +213,7 @@
             // 
             // buttonComenzar
             // 
+            this.buttonComenzar.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.buttonComenzar.Location = new System.Drawing.Point(1015, 413);
             this.buttonComenzar.Name = "buttonComenzar";
             this.buttonComenzar.Size = new System.Drawing.Size(75, 23);
@@ -215,6 +224,7 @@
             // 
             // buttonParar
             // 
+            this.buttonParar.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.buttonParar.Location = new System.Drawing.Point(896, 413);
             this.buttonParar.Name = "buttonParar";
             this.buttonParar.Size = new System.Drawing.Size(75, 23);
@@ -225,6 +235,8 @@
             // 
             // listViewB
             // 
+            this.listViewB.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.listViewB.Location = new System.Drawing.Point(1015, 106);
             this.listViewB.Name = "listViewB";
             this.listViewB.Size = new System.Drawing.Size(190, 272);
@@ -233,6 +245,8 @@
             // 
             // listViewA
             // 
+            this.listViewA.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.listViewA.Location = new System.Drawing.Point(809, 106);
             this.listViewA.Name = "listViewA";
             this.listViewA.Size = new System.Drawing.Size(190, 272);
@@ -241,6 +255,7 @@
             // 
             // labelSalieron
             // 
+            this.labelSalieron.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.labelSalieron.AutoSize = true;
             this.labelSalieron.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.labelSalieron.ForeColor = System.Drawing.Color.Red;
@@ -252,6 +267,7 @@
             // 
             // labelEntraron
             // 
+            this.labelEntraron.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.labelEntraron.AutoSize = true;
             this.labelEntraron.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.labelEntraron.ForeColor = System.Drawing.Color.Green;
@@ -1064,7 +1080,6 @@
             this.groupBox15.Controls.Add(this.numMaxAreaScale);
             this.groupBox15.Controls.Add(this.label30);
             this.groupBox15.Controls.Add(this.richTextBox1);
-            this.groupBox15.Controls.Add(this.checkBox1);
             this.groupBox15.Location = new System.Drawing.Point(27, 29);
             this.groupBox15.Name = "groupBox15";
             this.groupBox15.Size = new System.Drawing.Size(312, 347);
@@ -1077,19 +1092,23 @@
             this.label31.AutoSize = true;
             this.label31.Location = new System.Drawing.Point(207, 65);
             this.label31.Name = "label31";
-            this.label31.Size = new System.Drawing.Size(38, 13);
+            this.label31.Size = new System.Drawing.Size(36, 13);
             this.label31.TabIndex = 4;
-            this.label31.Text = "MPixel";
+            this.label31.Text = "KPixel";
             // 
             // numMaxAreaScale
             // 
-            this.numMaxAreaScale.DecimalPlaces = 1;
             this.numMaxAreaScale.Location = new System.Drawing.Point(146, 63);
+            this.numMaxAreaScale.Maximum = new decimal(new int[] {
+            4000,
+            0,
+            0,
+            0});
             this.numMaxAreaScale.Name = "numMaxAreaScale";
             this.numMaxAreaScale.Size = new System.Drawing.Size(46, 20);
             this.numMaxAreaScale.TabIndex = 3;
             this.numMaxAreaScale.Value = new decimal(new int[] {
-            1,
+            300,
             0,
             0,
             0});
@@ -1111,17 +1130,6 @@
             this.richTextBox1.Size = new System.Drawing.Size(260, 233);
             this.richTextBox1.TabIndex = 1;
             this.richTextBox1.Text = "";
-            // 
-            // checkBox1
-            // 
-            this.checkBox1.AutoSize = true;
-            this.checkBox1.Location = new System.Drawing.Point(22, 29);
-            this.checkBox1.Name = "checkBox1";
-            this.checkBox1.Size = new System.Drawing.Size(59, 17);
-            this.checkBox1.TabIndex = 0;
-            this.checkBox1.Text = "Activar";
-            this.checkBox1.UseVisualStyleBackColor = true;
-            this.checkBox1.CheckedChanged += new System.EventHandler(this.checkBox1_CheckedChanged);
             // 
             // tabPage3
             // 
@@ -1178,12 +1186,26 @@
             // ckMantenerImg
             // 
             this.ckMantenerImg.AutoSize = true;
-            this.ckMantenerImg.Location = new System.Drawing.Point(146, 29);
+            this.ckMantenerImg.Location = new System.Drawing.Point(100, 29);
             this.ckMantenerImg.Name = "ckMantenerImg";
             this.ckMantenerImg.Size = new System.Drawing.Size(119, 17);
             this.ckMantenerImg.TabIndex = 5;
             this.ckMantenerImg.Text = "Mantener imágenes";
             this.ckMantenerImg.UseVisualStyleBackColor = true;
+            // 
+            // checkBox1
+            // 
+            this.checkBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.checkBox1.AutoSize = true;
+            this.checkBox1.Checked = true;
+            this.checkBox1.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.checkBox1.Location = new System.Drawing.Point(822, 19);
+            this.checkBox1.Name = "checkBox1";
+            this.checkBox1.Size = new System.Drawing.Size(121, 17);
+            this.checkBox1.TabIndex = 12;
+            this.checkBox1.Text = "Activar Gender/Age";
+            this.checkBox1.UseVisualStyleBackColor = true;
+            this.checkBox1.CheckedChanged += new System.EventHandler(this.checkBox1_CheckedChanged_1);
             // 
             // Inicio
             // 
@@ -1338,11 +1360,11 @@
         private System.Windows.Forms.TabPage tabPage5;
         private System.Windows.Forms.GroupBox groupBox15;
         private System.Windows.Forms.RichTextBox richTextBox1;
-        private System.Windows.Forms.CheckBox checkBox1;
         private System.Windows.Forms.Label label31;
         private System.Windows.Forms.NumericUpDown numMaxAreaScale;
         private System.Windows.Forms.Label label30;
         private System.Windows.Forms.CheckBox ckMantenerImg;
+        private System.Windows.Forms.CheckBox checkBox1;
     }
 }
 

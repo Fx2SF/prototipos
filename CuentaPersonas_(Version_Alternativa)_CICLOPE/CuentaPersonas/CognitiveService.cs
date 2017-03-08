@@ -1,8 +1,10 @@
 ﻿using System.Threading.Tasks;
 using Microsoft.ProjectOxford.Vision;
-using Microsoft.ProjectOxford.Vision.Contract;
 using System.IO;
 using System;
+using System.Drawing;
+using Microsoft.ProjectOxford.Vision.Contract;
+using Rectangle = System.Drawing.Rectangle;
 
 
 namespace CuentaPersonas
@@ -37,7 +39,7 @@ namespace CuentaPersonas
 
         
         //método para tomar los resultados e imprimirlos en consola
-        private string LogAnalysisResult(AnalysisResult result)
+        public string LogAnalysisResult(AnalysisResult result)
         {
             if (result == null)
             {
@@ -58,19 +60,64 @@ namespace CuentaPersonas
         }
 
 
-        public async Task<string> DoWork(string date)
+        public async Task<AnalysisResult> DoWork(string date,Bitmap bmp,double scale)
         {
 
             AnalysisResult analisis = await GetImageAnalysis(date);
             string directory = AppDomain.CurrentDomain.BaseDirectory;
+            if (bmp != null)
+            {
+                DrawFaceResult(bmp, analisis, scale);
+            }
+            
             if (!MantenerImagenes)
             {
                 File.Delete(directory + date + ".jpg");
             }
 
+            return analisis;
 
-            return LogAnalysisResult(analisis);
+        }
+        private Rectangle Scale(FaceRectangle r, double factor)
+        {
+            return new Rectangle(
+                x: (int)Math.Round(r.Left * factor),
+                y: (int)Math.Round(r.Top * factor),
+                width: (int)Math.Round(r.Width * factor),
+                height: (int)Math.Round(r.Height * factor)
+            );
+        }
 
+        public void DrawFaceResult(Bitmap bmp, AnalysisResult result,double scale)
+        {
+            // Create pen.
+            Pen pen = new Pen(System.Drawing.Color.Red, 1);
+            
+            if (result.Faces != null)
+            {
+                using (Graphics g = Graphics.FromImage(bmp))
+                {
+                    foreach (var face in result.Faces)
+                    {
+                        Rectangle rect = Scale(face.FaceRectangle, 1 / scale);
+                        g.DrawRectangle(pen, rect);
+                        var text = face.Gender + " " + face.Age;
+                        Font drawFont = new System.Drawing.Font("Arial", 10);
+                        SolidBrush drawBrush = new SolidBrush(System.Drawing.Color.Red);
+                        FontFamily fontFamily = drawFont.FontFamily;
+                        FontStyle fontStyle = drawFont.Style;
+                        float x = rect.Left;
+                        float y = rect.Top - 5;
+                        y -= fontFamily.GetCellAscent(fontStyle) * drawFont.Size / fontFamily.GetEmHeight(fontStyle);
+                        y = Math.Max(y, 0);
+                        
+                        g.DrawString(text, drawFont, drawBrush,x,y);
+                        drawFont.Dispose();
+                        drawBrush.Dispose();
+                    }
+                }
+
+            }
         }
     }
 }
