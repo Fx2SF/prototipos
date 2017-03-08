@@ -14,7 +14,6 @@ namespace CuentaPersonas
 
         // creo un cliente de la API (usando una API Key)
         private VisionServiceClient visionClient = null;
-        public bool MantenerImagenes { get; set; } = false;
 
         public CognitiveService()
         {
@@ -70,10 +69,8 @@ namespace CuentaPersonas
                 DrawFaceResult(bmp, analisis, scale);
             }
             
-            if (!MantenerImagenes)
-            {
-                File.Delete(directory + date + ".jpg");
-            }
+            File.Delete(directory + date + ".jpg");
+            
 
             return analisis;
 
@@ -91,7 +88,7 @@ namespace CuentaPersonas
         public void DrawFaceResult(Bitmap bmp, AnalysisResult result,double scale)
         {
             // Create pen.
-            Pen pen = new Pen(System.Drawing.Color.Red, 1);
+            Pen pen = new Pen(System.Drawing.Color.Red, 2);
             
             if (result.Faces != null)
             {
@@ -102,7 +99,7 @@ namespace CuentaPersonas
                         Rectangle rect = Scale(face.FaceRectangle, 1 / scale);
                         g.DrawRectangle(pen, rect);
                         var text = face.Gender + " " + face.Age;
-                        Font drawFont = new System.Drawing.Font("Arial", 10);
+                        Font drawFont = new System.Drawing.Font("Arial", 12);
                         SolidBrush drawBrush = new SolidBrush(System.Drawing.Color.Red);
                         FontFamily fontFamily = drawFont.FontFamily;
                         FontStyle fontStyle = drawFont.Style;

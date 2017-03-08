@@ -34,8 +34,6 @@
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.buttonComenzar = new System.Windows.Forms.Button();
             this.buttonParar = new System.Windows.Forms.Button();
-            this.listViewB = new System.Windows.Forms.ListView();
-            this.listViewA = new System.Windows.Forms.ListView();
             this.labelSalieron = new System.Windows.Forms.Label();
             this.labelEntraron = new System.Windows.Forms.Label();
             this.button2 = new System.Windows.Forms.Button();
@@ -130,10 +128,15 @@
             this.label29 = new System.Windows.Forms.Label();
             this.label28 = new System.Windows.Forms.Label();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
-            this.imageListA = new System.Windows.Forms.ImageList(this.components);
-            this.imageListB = new System.Windows.Forms.ImageList(this.components);
             this.ckMantenerImg = new System.Windows.Forms.CheckBox();
             this.checkBox1 = new System.Windows.Forms.CheckBox();
+            this.gridA = new System.Windows.Forms.DataGridView();
+            this.gridB = new System.Windows.Forms.DataGridView();
+            this.dataGridViewImageColumn1 = new System.Windows.Forms.DataGridViewImageColumn();
+            this.dataGridViewTextBoxColumn1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colImg = new System.Windows.Forms.DataGridViewImageColumn();
+            this.Analisis = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.cboxMantener = new System.Windows.Forms.ComboBox();
             ((System.ComponentModel.ISupportInitialize)(this.imageBox1)).BeginInit();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
@@ -159,6 +162,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.numMaxAreaScale)).BeginInit();
             this.tabPage3.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.gridA)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.gridB)).BeginInit();
             this.SuspendLayout();
             // 
             // imageBox1
@@ -192,11 +197,11 @@
             // 
             // tabPage1
             // 
+            this.tabPage1.Controls.Add(this.gridB);
+            this.tabPage1.Controls.Add(this.gridA);
             this.tabPage1.Controls.Add(this.checkBox1);
             this.tabPage1.Controls.Add(this.buttonComenzar);
             this.tabPage1.Controls.Add(this.buttonParar);
-            this.tabPage1.Controls.Add(this.listViewB);
-            this.tabPage1.Controls.Add(this.listViewA);
             this.tabPage1.Controls.Add(this.labelSalieron);
             this.tabPage1.Controls.Add(this.labelEntraron);
             this.tabPage1.Controls.Add(this.button2);
@@ -232,26 +237,6 @@
             this.buttonParar.Text = "Parar";
             this.buttonParar.UseVisualStyleBackColor = true;
             this.buttonParar.Click += new System.EventHandler(this.buttonParar_Click);
-            // 
-            // listViewB
-            // 
-            this.listViewB.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.listViewB.Location = new System.Drawing.Point(1015, 106);
-            this.listViewB.Name = "listViewB";
-            this.listViewB.Size = new System.Drawing.Size(190, 272);
-            this.listViewB.TabIndex = 9;
-            this.listViewB.UseCompatibleStateImageBehavior = false;
-            // 
-            // listViewA
-            // 
-            this.listViewA.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.listViewA.Location = new System.Drawing.Point(809, 106);
-            this.listViewA.Name = "listViewA";
-            this.listViewA.Size = new System.Drawing.Size(190, 272);
-            this.listViewA.TabIndex = 8;
-            this.listViewA.UseCompatibleStateImageBehavior = false;
             // 
             // labelSalieron
             // 
@@ -1075,6 +1060,7 @@
             // 
             // groupBox15
             // 
+            this.groupBox15.Controls.Add(this.cboxMantener);
             this.groupBox15.Controls.Add(this.ckMantenerImg);
             this.groupBox15.Controls.Add(this.label31);
             this.groupBox15.Controls.Add(this.numMaxAreaScale);
@@ -1127,6 +1113,7 @@
             // 
             this.richTextBox1.Location = new System.Drawing.Point(22, 95);
             this.richTextBox1.Name = "richTextBox1";
+            this.richTextBox1.ReadOnly = true;
             this.richTextBox1.Size = new System.Drawing.Size(260, 233);
             this.richTextBox1.TabIndex = 1;
             this.richTextBox1.Text = "";
@@ -1171,27 +1158,16 @@
             this.pictureBox1.TabIndex = 0;
             this.pictureBox1.TabStop = false;
             // 
-            // imageListA
-            // 
-            this.imageListA.ColorDepth = System.Windows.Forms.ColorDepth.Depth8Bit;
-            this.imageListA.ImageSize = new System.Drawing.Size(16, 16);
-            this.imageListA.TransparentColor = System.Drawing.Color.Transparent;
-            // 
-            // imageListB
-            // 
-            this.imageListB.ColorDepth = System.Windows.Forms.ColorDepth.Depth8Bit;
-            this.imageListB.ImageSize = new System.Drawing.Size(16, 16);
-            this.imageListB.TransparentColor = System.Drawing.Color.Transparent;
-            // 
             // ckMantenerImg
             // 
             this.ckMantenerImg.AutoSize = true;
-            this.ckMantenerImg.Location = new System.Drawing.Point(100, 29);
+            this.ckMantenerImg.Location = new System.Drawing.Point(22, 30);
             this.ckMantenerImg.Name = "ckMantenerImg";
             this.ckMantenerImg.Size = new System.Drawing.Size(119, 17);
             this.ckMantenerImg.TabIndex = 5;
             this.ckMantenerImg.Text = "Mantener imágenes";
             this.ckMantenerImg.UseVisualStyleBackColor = true;
+            this.ckMantenerImg.CheckedChanged += new System.EventHandler(this.ckMantenerImg_CheckedChanged);
             // 
             // checkBox1
             // 
@@ -1206,6 +1182,91 @@
             this.checkBox1.Text = "Activar Gender/Age";
             this.checkBox1.UseVisualStyleBackColor = true;
             this.checkBox1.CheckedChanged += new System.EventHandler(this.checkBox1_CheckedChanged_1);
+            // 
+            // gridA
+            // 
+            this.gridA.AllowUserToAddRows = false;
+            this.gridA.AllowUserToDeleteRows = false;
+            this.gridA.AllowUserToResizeColumns = false;
+            this.gridA.AllowUserToResizeRows = false;
+            this.gridA.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.gridA.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.AllCellsExceptHeaders;
+            this.gridA.BackgroundColor = System.Drawing.SystemColors.Window;
+            this.gridA.CellBorderStyle = System.Windows.Forms.DataGridViewCellBorderStyle.SingleHorizontal;
+            this.gridA.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.gridA.ColumnHeadersVisible = false;
+            this.gridA.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.colImg,
+            this.Analisis});
+            this.gridA.Location = new System.Drawing.Point(822, 85);
+            this.gridA.Name = "gridA";
+            this.gridA.RowHeadersVisible = false;
+            this.gridA.Size = new System.Drawing.Size(187, 322);
+            this.gridA.TabIndex = 13;
+            // 
+            // gridB
+            // 
+            this.gridB.AllowUserToAddRows = false;
+            this.gridB.AllowUserToDeleteRows = false;
+            this.gridB.AllowUserToResizeColumns = false;
+            this.gridB.AllowUserToResizeRows = false;
+            this.gridB.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.gridB.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.AllCellsExceptHeaders;
+            this.gridB.BackgroundColor = System.Drawing.SystemColors.Window;
+            this.gridB.CellBorderStyle = System.Windows.Forms.DataGridViewCellBorderStyle.SingleHorizontal;
+            this.gridB.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.gridB.ColumnHeadersVisible = false;
+            this.gridB.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.dataGridViewImageColumn1,
+            this.dataGridViewTextBoxColumn1});
+            this.gridB.Location = new System.Drawing.Point(1018, 85);
+            this.gridB.Name = "gridB";
+            this.gridB.RowHeadersVisible = false;
+            this.gridB.Size = new System.Drawing.Size(187, 322);
+            this.gridB.TabIndex = 14;
+            // 
+            // dataGridViewImageColumn1
+            // 
+            this.dataGridViewImageColumn1.HeaderText = "Img";
+            this.dataGridViewImageColumn1.ImageLayout = System.Windows.Forms.DataGridViewImageCellLayout.Stretch;
+            this.dataGridViewImageColumn1.Name = "dataGridViewImageColumn1";
+            this.dataGridViewImageColumn1.Width = 75;
+            // 
+            // dataGridViewTextBoxColumn1
+            // 
+            this.dataGridViewTextBoxColumn1.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCellsExceptHeader;
+            this.dataGridViewTextBoxColumn1.HeaderText = "Analisis";
+            this.dataGridViewTextBoxColumn1.Name = "dataGridViewTextBoxColumn1";
+            this.dataGridViewTextBoxColumn1.Width = 5;
+            // 
+            // colImg
+            // 
+            this.colImg.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCellsExceptHeader;
+            this.colImg.HeaderText = "Img";
+            this.colImg.ImageLayout = System.Windows.Forms.DataGridViewImageCellLayout.Stretch;
+            this.colImg.Name = "colImg";
+            this.colImg.Width = 5;
+            // 
+            // Analisis
+            // 
+            this.Analisis.HeaderText = "Analisis";
+            this.Analisis.Name = "Analisis";
+            this.Analisis.Width = 50;
+            // 
+            // cboxMantener
+            // 
+            this.cboxMantener.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cboxMantener.FormattingEnabled = true;
+            this.cboxMantener.Items.AddRange(new object[] {
+            "Con rostros",
+            "Todas"});
+            this.cboxMantener.Location = new System.Drawing.Point(147, 28);
+            this.cboxMantener.Name = "cboxMantener";
+            this.cboxMantener.Size = new System.Drawing.Size(121, 21);
+            this.cboxMantener.TabIndex = 6;
+            this.cboxMantener.SelectedIndexChanged += new System.EventHandler(this.cboxMantener_SelectedIndexChanged);
             // 
             // Inicio
             // 
@@ -1254,6 +1315,8 @@
             this.tabPage3.ResumeLayout(false);
             this.tabPage3.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.gridA)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.gridB)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -1345,10 +1408,6 @@
         private System.Windows.Forms.Label label25;
         private System.Windows.Forms.Label labelSalieron;
         private System.Windows.Forms.Label labelEntraron;
-        private System.Windows.Forms.ListView listViewA;
-        private System.Windows.Forms.ImageList imageListA;
-        private System.Windows.Forms.ListView listViewB;
-        private System.Windows.Forms.ImageList imageListB;
         private System.Windows.Forms.Button buttonComenzar;
         private System.Windows.Forms.Button buttonParar;
         private System.Windows.Forms.Label label29;
@@ -1365,6 +1424,13 @@
         private System.Windows.Forms.Label label30;
         private System.Windows.Forms.CheckBox ckMantenerImg;
         private System.Windows.Forms.CheckBox checkBox1;
+        private System.Windows.Forms.DataGridView gridB;
+        private System.Windows.Forms.DataGridView gridA;
+        private System.Windows.Forms.DataGridViewImageColumn dataGridViewImageColumn1;
+        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn1;
+        private System.Windows.Forms.DataGridViewImageColumn colImg;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Analisis;
+        private System.Windows.Forms.ComboBox cboxMantener;
     }
 }
 
