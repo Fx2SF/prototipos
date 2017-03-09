@@ -96,7 +96,9 @@ namespace CuentaPersonas
         {
             InitializeComponent();
             cboxMantener.SelectedIndex = 0;
-
+            ToolTip tt = new ToolTip();
+            tt.AutomaticDelay = 200;
+            tt.SetToolTip(this.btPuntos, "Click izquierdo sobre \nla imagen para elegir");
 
             gridA.Columns[0].Width = _gridImageSize.Width;
             gridB.Columns[0].Width = _gridImageSize.Width;
@@ -907,11 +909,13 @@ namespace CuentaPersonas
         {
             _seleccionPuntos = 1;
             btPuntos.Enabled = false;
+
+
         }
 
         private void imageBox1_MouseMove(object sender, MouseEventArgs e)
         {
-            if (_seleccionPuntos == 2)
+           if (_seleccionPuntos == 2)
             {
                 int px = 0;
                 int py = 0;
