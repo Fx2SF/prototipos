@@ -14,7 +14,7 @@ using Emgu.CV.BgSegm;
 
 using System.Runtime.InteropServices;
 using System.Threading;
-
+using Emgu.CV.UI;
 
 namespace CuentaPersonas
 {
@@ -27,8 +27,12 @@ namespace CuentaPersonas
         private static CvBlobDetector _blobDetector;
         private static CvTracks _tracker;
         private bool _inProgress;
+        
 
         private Size tam5 = new Size(5, 5);
+
+        private int DIR_ABAJO_ARRIBA = 1;
+        private int DIR_IZQ_DER = 2;
 
         private MCvScalar SCALAR_BLACK = new MCvScalar(0.0, 0.0, 0.0);
         private MCvScalar SCALAR_WHITE = new MCvScalar(255.0, 255.0, 255.0);
@@ -76,12 +80,15 @@ namespace CuentaPersonas
         private bool parar;
         private bool api;
         private int _maxAreaEnviada;
+        
 
 
 
         private Size _gridImageSize = new Size(80,125);
         private bool _mantenerImagenes;
         private bool _mantenerTodasImagenes;
+
+        private int _seleccionPuntos = 0;
 
         CognitiveService cog;
 
@@ -155,6 +162,7 @@ namespace CuentaPersonas
                 if (textBox1.Text.ToString().CompareTo("") != 0)
                 {
                     _cameraCapture = new VideoCapture(this.textBox1.Text.ToString());
+                    btPuntos.Enabled = true;
                     gridA.Rows.Clear();
                     gridB.Rows.Clear();
                     gridA.ClearSelection();
@@ -212,89 +220,7 @@ namespace CuentaPersonas
                     _p1 = new Point((int)(_cameraCapture.Width * x1), (int)(_cameraCapture.Height * y1));
                     _p2 = new Point((int)(_cameraCapture.Width * x2), (int)(_cameraCapture.Height * y2));
 
-                    string shapeErode = comboBoxShapeE.Text;
-                    int sizeErode = int.Parse(textBoxErodeSize.Text);
-                    cantErode = int.Parse(textBoxErodeCant.Text);
-
-                    if (shapeErode.CompareTo("Rectangle") == 0)
-                    {
-                        structuringElementErode = CvInvoke.GetStructuringElement(ElementShape.Rectangle, new Size(sizeErode, sizeErode), _p0);
-                    }
-                    else if (shapeErode.CompareTo("Ellipse") == 0)
-                    {
-                        structuringElementErode = CvInvoke.GetStructuringElement(ElementShape.Ellipse, new Size(sizeErode, sizeErode), _p0);
-                    }
-                    else if (shapeErode.CompareTo("Cross") == 0)
-                    {
-                        structuringElementErode = CvInvoke.GetStructuringElement(ElementShape.Cross, new Size(sizeErode, sizeErode), _p0);
-                    }
-
-                    string shapeDilate = comboBoxShapeD.Text;
-                    int sizeDilate = int.Parse(textBoxDilateSize.Text);
-                    cantDilate = int.Parse(textBoxDilateCant.Text);
-
-                    if (shapeDilate.CompareTo("Rectangle") == 0)
-                    {
-                        structuringElementDilate = CvInvoke.GetStructuringElement(ElementShape.Rectangle, new Size(sizeDilate, sizeDilate), _p0);
-                    }
-                    else if (shapeDilate.CompareTo("Ellipse") == 0)
-                    {
-                        structuringElementDilate = CvInvoke.GetStructuringElement(ElementShape.Ellipse, new Size(sizeDilate, sizeDilate), _p0);
-                    }
-                    else if (shapeDilate.CompareTo("Cross") == 0)
-                    {
-                        structuringElementDilate = CvInvoke.GetStructuringElement(ElementShape.Cross, new Size(sizeDilate, sizeDilate), _p0);
-                    }
-
-                    // ----------------------------
-
-                    line = new LineSegment2D(_p1, _p2);
-
-                    double vx = _p2.X - _p1.X;
-                    double vy = _p2.Y - _p1.Y;
-                    double mag = Math.Sqrt(vx * vx + vy * vy);
-                    vx = (int)vx / mag;
-                    vy = vy / mag;
-
-                    double temp = vx;
-                    vx = vy;
-                    vy = -temp;
-
-                    int length = 10;
-
-                    int cx = (int)(_p2.X + vx * length);
-                    int cy = (int)(_p2.Y + vy * length);
-
-                    int dx = (int)(_p2.X + vx * -length);
-                    int dy = (int)(_p2.Y + vy * -length);
-
-                    _pt3 = new Point(cx, cy);
-                    _pt4 = new Point(dx, dy);
-                    l1 = new LineSegment2D(_pt3, _pt4);
-
-                    // ---------
-
-                    double vx2 = _p2.X - _p1.X;
-                    double vy2 = _p1.Y - _p2.Y;
-                    double mag2 = Math.Sqrt(vx2 * vx2 + vy2 * vy2);
-                    vx2 = (int)vx2 / mag2;
-                    vy2 = vy2 / mag2;
-
-                    double temp2 = vx2;
-                    vx2 = vy2;
-                    vy2 = -temp2;
-
-                    int length2 = 10;
-
-                    int cx2 = (int)(_p1.X + vx2 * length2);
-                    int cy2 = (int)(_p1.Y + vy2 * length2);
-
-                    int dx2 = (int)(_p1.X + vx2 * -length2);
-                    int dy2 = (int)(_p1.Y + vy2 * -length2);
-
-                    _pt5 = new Point(cx2, cy2);
-                    _pt6 = new Point(dx2, dy2);
-                    l2 = new LineSegment2D(_pt5, _pt6);
+                    ConfigGeometria();
 
                     api = checkBox1.Checked;
 
@@ -309,6 +235,98 @@ namespace CuentaPersonas
             {
                 MessageBox.Show(excpt.Message);
             }
+        }
+
+        private void ConfigGeometria()
+        {
+            string shapeErode = comboBoxShapeE.Text;
+            int sizeErode = int.Parse(textBoxErodeSize.Text);
+            cantErode = int.Parse(textBoxErodeCant.Text);
+
+            if (shapeErode.CompareTo("Rectangle") == 0)
+            {
+                structuringElementErode = CvInvoke.GetStructuringElement(ElementShape.Rectangle, new Size(sizeErode, sizeErode),
+                    _p0);
+            }
+            else if (shapeErode.CompareTo("Ellipse") == 0)
+            {
+                structuringElementErode = CvInvoke.GetStructuringElement(ElementShape.Ellipse, new Size(sizeErode, sizeErode),
+                    _p0);
+            }
+            else if (shapeErode.CompareTo("Cross") == 0)
+            {
+                structuringElementErode = CvInvoke.GetStructuringElement(ElementShape.Cross, new Size(sizeErode, sizeErode), _p0);
+            }
+
+            string shapeDilate = comboBoxShapeD.Text;
+            int sizeDilate = int.Parse(textBoxDilateSize.Text);
+            cantDilate = int.Parse(textBoxDilateCant.Text);
+
+            if (shapeDilate.CompareTo("Rectangle") == 0)
+            {
+                structuringElementDilate = CvInvoke.GetStructuringElement(ElementShape.Rectangle,
+                    new Size(sizeDilate, sizeDilate), _p0);
+            }
+            else if (shapeDilate.CompareTo("Ellipse") == 0)
+            {
+                structuringElementDilate = CvInvoke.GetStructuringElement(ElementShape.Ellipse, new Size(sizeDilate, sizeDilate),
+                    _p0);
+            }
+            else if (shapeDilate.CompareTo("Cross") == 0)
+            {
+                structuringElementDilate = CvInvoke.GetStructuringElement(ElementShape.Cross, new Size(sizeDilate, sizeDilate),
+                    _p0);
+            }
+
+            // ----------------------------
+
+            line = new LineSegment2D(_p1, _p2);
+
+            double vx = _p2.X - _p1.X;
+            double vy = _p2.Y - _p1.Y;
+            double mag = Math.Sqrt(vx * vx + vy * vy);
+            vx = (int) vx / mag;
+            vy = vy / mag;
+
+            double temp = vx;
+            vx = vy;
+            vy = -temp;
+
+            int length = 10;
+
+            int cx = (int) (_p2.X + vx * length);
+            int cy = (int) (_p2.Y + vy * length);
+
+            int dx = (int) (_p2.X + vx * -length);
+            int dy = (int) (_p2.Y + vy * -length);
+
+            _pt3 = new Point(cx, cy);
+            _pt4 = new Point(dx, dy);
+            l1 = new LineSegment2D(_pt3, _pt4);
+
+            // ---------
+
+            double vx2 = _p2.X - _p1.X;
+            double vy2 = _p1.Y - _p2.Y;
+            double mag2 = Math.Sqrt(vx2 * vx2 + vy2 * vy2);
+            vx2 = (int) vx2 / mag2;
+            vy2 = vy2 / mag2;
+
+            double temp2 = vx2;
+            vx2 = vy2;
+            vy2 = -temp2;
+
+            int length2 = 10;
+
+            int cx2 = (int) (_p1.X + vx2 * length2);
+            int cy2 = (int) (_p1.Y + vy2 * length2);
+
+            int dx2 = (int) (_p1.X + vx2 * -length2);
+            int dy2 = (int) (_p1.Y + vy2 * -length2);
+
+            _pt5 = new Point(cx2, cy2);
+            _pt6 = new Point(dx2, dy2);
+            l2 = new LineSegment2D(_pt5, _pt6);
         }
 
         // stop
@@ -541,6 +559,14 @@ namespace CuentaPersonas
                     CvInvoke.Line(frame, _p1, _p2, SCALAR_BLUE, 2);
                     CvInvoke.Line(frame, _pt4, _pt3, SCALAR_WHITE, 2);
                     CvInvoke.Line(frame, _pt5, _pt6, SCALAR_WHITE, 2);
+                    if (_p1_tmp.X != -1)
+                    {
+                        CvInvoke.Circle(frame,_p1_tmp,8,this.SCALAR_CYAN,-1);
+                    }
+                    if (_p2_tmp.X != -1)
+                    {
+                        CvInvoke.Circle(frame, _p2_tmp, 8, this.SCALAR_CYAN, -1);
+                    }
 
                     imageBox1.Image = frame;
                     imageBox2.Image = forgroundMask;
@@ -587,7 +613,68 @@ namespace CuentaPersonas
             }
         }
 
-// ProcessFrame
+        /// <summary>
+        /// Convert the coordinates for the image's SizeMode. (MAGIA)
+        /// </summary>
+        /// https://www.codeproject.com/script/articles/view.aspx?aid=859100
+        /// http://csharphelper.com/blog/2014/10/select-parts-of-a-scaled-image-picturebox-different-sizemode-values-c/</a>
+        /// <param name="pic"></param>
+        /// <param name="X0">out X coordinate</param>
+        /// <param name="Y0">out Y coordinate</param>
+        /// <param name="x">actual coordinate</param>
+        /// <param name="y">actual coordinate</param>
+        public static void ConvertCoordinates(ImageBox pic,
+            out int X0, out int Y0, int x, int y)
+        {
+            int pic_hgt = pic.ClientSize.Height;
+            int pic_wid = pic.ClientSize.Width;
+            int img_hgt = pic.Image.Size.Height;
+            int img_wid = pic.Image.Size.Width;
+
+            X0 = x;
+            Y0 = y;
+            switch (pic.SizeMode)
+            {
+                case PictureBoxSizeMode.AutoSize:
+                case PictureBoxSizeMode.Normal:
+                    // These are okay. Leave them alone.
+                    break;
+                case PictureBoxSizeMode.CenterImage:
+                    X0 = x - (pic_wid - img_wid) / 2;
+                    Y0 = y - (pic_hgt - img_hgt) / 2;
+                    break;
+                case PictureBoxSizeMode.StretchImage:
+                    X0 = (int)(img_wid * x / (float)pic_wid);
+                    Y0 = (int)(img_hgt * y / (float)pic_hgt);
+                    break;
+                case PictureBoxSizeMode.Zoom:
+                    float pic_aspect = pic_wid / (float)pic_hgt;
+                    float img_aspect = img_wid / (float)img_wid;
+                    if (pic_aspect > img_aspect)
+                    {
+                        // The PictureBox is wider/shorter than the image.
+                        Y0 = (int)(img_hgt * y / (float)pic_hgt);
+
+                        // The image fills the height of the PictureBox.
+                        // Get its width.
+                        float scaled_width = img_wid * pic_hgt / img_hgt;
+                        float dx = (pic_wid - scaled_width) / 2;
+                        X0 = (int)((x - dx) * img_hgt / (float)pic_hgt);
+                    }
+                    else
+                    {
+                        // The PictureBox is taller/thinner than the image.
+                        X0 = (int)(img_wid * x / (float)pic_wid);
+
+                        // The image fills the height of the PictureBox.
+                        // Get its height.
+                        float scaled_height = img_hgt * pic_wid / img_wid;
+                        float dy = (pic_hgt - scaled_height) / 2;
+                        Y0 = (int)((y - dy) * img_wid / pic_wid);
+                    }
+                    break;
+            }
+        }
 
 
 
@@ -744,6 +831,102 @@ namespace CuentaPersonas
         private void cboxMantener_SelectedIndexChanged(object sender, EventArgs e)
         {
             _mantenerTodasImagenes = cboxMantener.SelectedIndex == 1;
+        }
+
+        private Point _p1_tmp = new Point(-1,-1);
+        private Point _p2_tmp = new Point(-1,-1);
+        private void imageBox1_Click(object sender, EventArgs e)
+        {
+
+            MouseEventArgs mouse = e as MouseEventArgs;
+            if (mouse != null && _seleccionPuntos > 0)
+            {
+                var mouseLoc = mouse.Location;
+
+                int px = 0;
+                int py = 0;
+                ConvertCoordinates(imageBox1, out px, out py, mouseLoc.X, mouseLoc.Y);
+                if (_seleccionPuntos == 1) // estoy eligiendo p1
+                {
+                    _p1_tmp = new Point(px,py);
+                    _seleccionPuntos = 2;
+                }
+                else if (_seleccionPuntos == 2) // ya elegi p1 y estoy eligiendo p2
+                {
+
+                    try
+                    {
+                        _p1 = _p1_tmp;
+                        _p2 = new Point(px, py);
+                        _p1_tmp = new Point(-1, -1);
+                        _p2_tmp = new Point(-1, -1);
+
+                        var tmp = _p1;
+
+                        if (_direction == DIR_ABAJO_ARRIBA)
+                        {
+                            _p2.Y = _p1.Y;
+                            if (_p1.X > _p2.X)
+                            {
+                                // mantengo p1.X <= p2.X (no se si es importante)
+                                _p1 = _p2;
+                                _p2 = tmp;
+                            }
+                        }
+                        else if (_direction == DIR_IZQ_DER)
+                        {
+                            _p2.X = _p1.X;
+                            if (_p1.Y > _p2.Y)
+                            {
+                                // mantengo p1.Y <= p2.Y (no se si es importante)
+                                _p1 = _p2;
+                                _p2 = tmp;
+                            }
+                        }
+                        // actualizo cuadros de texto para que quede igual si lo detengo
+                        textX1.Text = String.Format("{0:n3}", Math.Round(_p1.X / (double)_cameraCapture.Width, 3));
+                        textX2.Text = String.Format("{0:n3}", Math.Round(_p2.X / (double)_cameraCapture.Width, 3));
+                        textY1.Text = String.Format("{0:n3}", Math.Round(_p1.Y / (double)_cameraCapture.Height, 3));
+                        textY2.Text = String.Format("{0:n3}", Math.Round(_p2.Y / (double)_cameraCapture.Height, 3));
+                        ConfigGeometria();
+                    }
+                    finally
+                    {
+                        // desactivo seleccion de puntos
+                        _seleccionPuntos = 0;
+                        btPuntos.Enabled = true;
+                    }
+
+                }
+                
+            }
+          
+        }
+
+        private void btPuntos_Click(object sender, EventArgs e)
+        {
+            _seleccionPuntos = 1;
+            btPuntos.Enabled = false;
+        }
+
+        private void imageBox1_MouseMove(object sender, MouseEventArgs e)
+        {
+            if (_seleccionPuntos == 2)
+            {
+                int px = 0;
+                int py = 0;
+                var mouseLoc = e.Location;
+                ConvertCoordinates(imageBox1, out px, out py, mouseLoc.X, mouseLoc.Y);
+                if (_direction == DIR_ABAJO_ARRIBA)
+                {
+                    _p2_tmp = new Point(px, _p1_tmp.Y);
+                }
+                else if (_direction == DIR_IZQ_DER)
+                {
+                    _p2_tmp = new Point(_p1_tmp.X, py);
+                }
+
+            }
         }
     }
 }

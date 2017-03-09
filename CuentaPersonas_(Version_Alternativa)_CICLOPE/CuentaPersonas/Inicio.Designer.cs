@@ -29,10 +29,10 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle21 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle22 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle23 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle24 = new System.Windows.Forms.DataGridViewCellStyle();
             this.imageBox1 = new Emgu.CV.UI.ImageBox();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
@@ -141,6 +141,7 @@
             this.colImg = new System.Windows.Forms.DataGridViewImageColumn();
             this.Analisis = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.cboxMantener = new System.Windows.Forms.ComboBox();
+            this.btPuntos = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.imageBox1)).BeginInit();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
@@ -182,6 +183,8 @@
             this.imageBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.imageBox1.TabIndex = 2;
             this.imageBox1.TabStop = false;
+            this.imageBox1.Click += new System.EventHandler(this.imageBox1_Click);
+            this.imageBox1.MouseMove += new System.Windows.Forms.MouseEventHandler(this.imageBox1_MouseMove);
             // 
             // tabControl1
             // 
@@ -201,6 +204,7 @@
             // 
             // tabPage1
             // 
+            this.tabPage1.Controls.Add(this.btPuntos);
             this.tabPage1.Controls.Add(this.gridB);
             this.tabPage1.Controls.Add(this.gridA);
             this.tabPage1.Controls.Add(this.checkBox1);
@@ -300,7 +304,7 @@
             this.tabPage4.Name = "tabPage4";
             this.tabPage4.Size = new System.Drawing.Size(1211, 462);
             this.tabPage4.TabIndex = 3;
-            this.tabPage4.Text = "Forground Mask";
+            this.tabPage4.Text = "Foreground Mask";
             this.tabPage4.UseVisualStyleBackColor = true;
             // 
             // imageBox2
@@ -1179,7 +1183,7 @@
             this.checkBox1.AutoSize = true;
             this.checkBox1.Checked = true;
             this.checkBox1.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.checkBox1.Location = new System.Drawing.Point(822, 19);
+            this.checkBox1.Location = new System.Drawing.Point(930, 38);
             this.checkBox1.Name = "checkBox1";
             this.checkBox1.Size = new System.Drawing.Size(121, 17);
             this.checkBox1.TabIndex = 12;
@@ -1193,8 +1197,8 @@
             this.gridA.AllowUserToDeleteRows = false;
             this.gridA.AllowUserToResizeColumns = false;
             this.gridA.AllowUserToResizeRows = false;
-            dataGridViewCellStyle3.SelectionBackColor = System.Drawing.SystemColors.MenuHighlight;
-            this.gridA.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle3;
+            dataGridViewCellStyle21.SelectionBackColor = System.Drawing.SystemColors.MenuHighlight;
+            this.gridA.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle21;
             this.gridA.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.gridA.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.AllCellsExceptHeaders;
@@ -1205,14 +1209,14 @@
             this.gridA.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.colImg,
             this.Analisis});
-            dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle4.BackColor = System.Drawing.SystemColors.Window;
-            dataGridViewCellStyle4.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle4.ForeColor = System.Drawing.SystemColors.ControlText;
-            dataGridViewCellStyle4.SelectionBackColor = System.Drawing.SystemColors.MenuHighlight;
-            dataGridViewCellStyle4.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle4.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.gridA.DefaultCellStyle = dataGridViewCellStyle4;
+            dataGridViewCellStyle22.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle22.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle22.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle22.ForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle22.SelectionBackColor = System.Drawing.SystemColors.MenuHighlight;
+            dataGridViewCellStyle22.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle22.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.gridA.DefaultCellStyle = dataGridViewCellStyle22;
             this.gridA.Location = new System.Drawing.Point(822, 85);
             this.gridA.Name = "gridA";
             this.gridA.RowHeadersVisible = false;
@@ -1226,8 +1230,8 @@
             this.gridB.AllowUserToDeleteRows = false;
             this.gridB.AllowUserToResizeColumns = false;
             this.gridB.AllowUserToResizeRows = false;
-            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.MenuHighlight;
-            this.gridB.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle23.SelectionBackColor = System.Drawing.SystemColors.MenuHighlight;
+            this.gridB.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle23;
             this.gridB.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.gridB.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.AllCellsExceptHeaders;
@@ -1238,14 +1242,14 @@
             this.gridB.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.dataGridViewImageColumn1,
             this.dataGridViewTextBoxColumn1});
-            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Window;
-            dataGridViewCellStyle2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.ControlText;
-            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.MenuHighlight;
-            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.gridB.DefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle24.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle24.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle24.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle24.ForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle24.SelectionBackColor = System.Drawing.SystemColors.MenuHighlight;
+            dataGridViewCellStyle24.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle24.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.gridB.DefaultCellStyle = dataGridViewCellStyle24;
             this.gridB.Location = new System.Drawing.Point(1018, 85);
             this.gridB.Name = "gridB";
             this.gridB.RowHeadersVisible = false;
@@ -1292,6 +1296,16 @@
             this.cboxMantener.Size = new System.Drawing.Size(121, 21);
             this.cboxMantener.TabIndex = 6;
             this.cboxMantener.SelectedIndexChanged += new System.EventHandler(this.cboxMantener_SelectedIndexChanged);
+            // 
+            // btPuntos
+            // 
+            this.btPuntos.Location = new System.Drawing.Point(758, 12);
+            this.btPuntos.Name = "btPuntos";
+            this.btPuntos.Size = new System.Drawing.Size(134, 23);
+            this.btPuntos.TabIndex = 15;
+            this.btPuntos.Text = "Elegir nuevos puntos";
+            this.btPuntos.UseVisualStyleBackColor = true;
+            this.btPuntos.Click += new System.EventHandler(this.btPuntos_Click);
             // 
             // Inicio
             // 
@@ -1456,6 +1470,7 @@
         private System.Windows.Forms.DataGridViewImageColumn colImg;
         private System.Windows.Forms.DataGridViewTextBoxColumn Analisis;
         private System.Windows.Forms.ComboBox cboxMantener;
+        private System.Windows.Forms.Button btPuntos;
     }
 }
 
