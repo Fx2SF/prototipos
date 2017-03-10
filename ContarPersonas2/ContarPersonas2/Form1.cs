@@ -104,7 +104,7 @@ namespace ContarPersonas2
             btSeek.Enabled = rbArchivo.Checked;
             if (rbArchivo.Checked || rbIP.Checked)
             {
-                _capture = new Capture(txtFuente.Text);
+                _capture = new Capture(cboxFuente.Text);
                 if (rbArchivo.Checked)
                 {
                     try
@@ -138,7 +138,7 @@ namespace ContarPersonas2
                 _contar.ColorHaarCascade = ckShowHaar.Checked;
                 ConfigRes();
                 _capture.ImageGrabbed += ProcessFrame;
-                txtFuente.Items.Insert(0,txtFuente.Text);
+                cboxFuente.Items.Insert(0,cboxFuente.Text);
                 _capture.Start();
             }
 
@@ -147,7 +147,7 @@ namespace ContarPersonas2
 
         private void SaveMRU()
         {
-            var list = txtFuente.Items.OfType<String>().ToList();
+            var list = cboxFuente.Items.OfType<String>().ToList();
             if (list.Count > 10)
             {
                 list = list.Take(10).ToList();
@@ -158,14 +158,21 @@ namespace ContarPersonas2
 
         private void LoadMRU()
         {
-            String[] mru = Settings.Default.MRU.Split(';');
-            foreach (var path in mru)
+            try
             {
-                if (path.Trim().Length > 0)
+                String[] mru = Settings.Default.MRU.Split(';');
+                foreach (var path in mru)
                 {
-                    txtFuente.Items.Add(path);
-                }
+                    if (path.Trim().Length > 0)
+                    {
+                        cboxFuente.Items.Add(path);
+                    }
 
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex);
             }
         }
 
@@ -606,7 +613,7 @@ namespace ContarPersonas2
                 TimeSpan duration = new Extractor().GetDuration(dialogSelectFile.FileName);
                 pickerFin.Value = DateTime.Today + duration;
                 btSelecBase.Enabled = true;*/
-                txtFuente.Text = dialogVideoFile.FileName;
+                cboxFuente.Text = dialogVideoFile.FileName;
             }
         }
 

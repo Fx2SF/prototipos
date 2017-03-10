@@ -178,7 +178,9 @@ namespace ContarPersonas
             haarAlt2 = new CascadeClassifier(Application.StartupPath + "/" + "haarcascade_frontalface_alt2.xml");
             haarProfile = new CascadeClassifier(Application.StartupPath + "/" + "haarcascade_profileface.xml");
             haarUpper = new CascadeClassifier(Application.StartupPath + "/" + "haarcascade_upperbody.xml");
+
             hog = new HOGDescriptor();
+            // establece el patron de personas por defecto
             hog.SetSVMDetector(HOGDescriptor.GetDefaultPeopleDetector());
         }
 
