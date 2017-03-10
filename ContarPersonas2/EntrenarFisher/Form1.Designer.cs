@@ -37,8 +37,8 @@
             this.btCSV = new System.Windows.Forms.Button();
             this.csvFaces = new System.Windows.Forms.OpenFileDialog();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.rbAll = new System.Windows.Forms.RadioButton();
             this.rbNorm = new System.Windows.Forms.RadioButton();
+            this.rbAll = new System.Windows.Forms.RadioButton();
             this.txtCsvFile = new System.Windows.Forms.TextBox();
             this.txtModel = new System.Windows.Forms.TextBox();
             this.btConfig = new System.Windows.Forms.Button();
@@ -73,7 +73,7 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(137, 56);
+            this.label1.Location = new System.Drawing.Point(180, 56);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(41, 13);
             this.label1.TabIndex = 3;
@@ -82,7 +82,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(272, 56);
+            this.label2.Location = new System.Drawing.Point(306, 56);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(28, 13);
             this.label2.TabIndex = 4;
@@ -91,7 +91,7 @@
             // numWidth
             // 
             this.numWidth.Enabled = false;
-            this.numWidth.Location = new System.Drawing.Point(184, 54);
+            this.numWidth.Location = new System.Drawing.Point(227, 54);
             this.numWidth.Maximum = new decimal(new int[] {
             1000,
             0,
@@ -114,7 +114,7 @@
             // numHeight
             // 
             this.numHeight.Enabled = false;
-            this.numHeight.Location = new System.Drawing.Point(306, 54);
+            this.numHeight.Location = new System.Drawing.Point(340, 54);
             this.numHeight.Maximum = new decimal(new int[] {
             1000,
             0,
@@ -159,10 +159,22 @@
             this.groupBox1.Controls.Add(this.label1);
             this.groupBox1.Location = new System.Drawing.Point(12, 128);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(392, 101);
+            this.groupBox1.Size = new System.Drawing.Size(430, 101);
             this.groupBox1.TabIndex = 11;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Tamaño de Imágenes";
+            // 
+            // rbNorm
+            // 
+            this.rbNorm.AutoSize = true;
+            this.rbNorm.Location = new System.Drawing.Point(12, 54);
+            this.rbNorm.Name = "rbNorm";
+            this.rbNorm.Size = new System.Drawing.Size(165, 17);
+            this.rbNorm.TabIndex = 8;
+            this.rbNorm.TabStop = true;
+            this.rbNorm.Text = "Recortar y normalizar tamaño:";
+            this.rbNorm.UseVisualStyleBackColor = true;
+            this.rbNorm.CheckedChanged += new System.EventHandler(this.rbNorm_CheckedChanged);
             // 
             // rbAll
             // 
@@ -176,18 +188,6 @@
             this.rbAll.Text = "Todas las imágenes tienen el mismo tamaño";
             this.rbAll.UseVisualStyleBackColor = true;
             this.rbAll.CheckedChanged += new System.EventHandler(this.rbAll_CheckedChanged);
-            // 
-            // rbNorm
-            // 
-            this.rbNorm.AutoSize = true;
-            this.rbNorm.Location = new System.Drawing.Point(12, 54);
-            this.rbNorm.Name = "rbNorm";
-            this.rbNorm.Size = new System.Drawing.Size(116, 17);
-            this.rbNorm.TabIndex = 8;
-            this.rbNorm.TabStop = true;
-            this.rbNorm.Text = "Normalizar Tamaño";
-            this.rbNorm.UseVisualStyleBackColor = true;
-            this.rbNorm.CheckedChanged += new System.EventHandler(this.rbNorm_CheckedChanged);
             // 
             // txtCsvFile
             // 
