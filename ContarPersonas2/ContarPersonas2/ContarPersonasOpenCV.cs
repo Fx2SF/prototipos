@@ -21,20 +21,29 @@ namespace ContarPersonas
 
         private int sumFaces = 0;
         private int processedFrames = 0;
-        private double resizeFactor = 1.0; // cuanto se agranda la imagen
+        private double resizeFactor = 0.75; // cuanto se agranda o reduce la imagen
         private double scaleFactor = 1.12; // cuanto se agranda el haarcascade en cada paso
         private bool eq = false;
+
+
+
+        public double ResizeFactorBodies { get; set; }= 0.5;
+        public double ResizeFactorFaces { get; set; } = 1.0;
+
+ 
+        public bool ShowROI { get; set; } = true;
+        // si mostrar en color distinto las detecciones de frente 
+        public bool ColorHaarCascade = false;
+
+        // cauntos frames el lugar de una deteccion es candidato a otra si se usa ROI
         private int ttl = 8;
-
-
-        //private  GenderDetector genderDetector = new GenderDetector("GeorgiaTech.fisher","GeorgiaTech.csv");
-        //private GenderDetector genderDetector = new GenderDetector("Yale2.fisher", "Yale.csv");
-
-
+        // TTL por rectangulo para candidato ROI 
         private Dictionary<Rectangle, int> _detections = new Dictionary<Rectangle, int>();
 
-        public bool ResizeThumbnails { get; set; } = false;
-        public bool ShowROI { get; set; } = true;
+        // cuanto tiempo mantener una deteccion 
+        public int DetectionKeepTime = 1;
+        // TTL por rectangulo para mantener deteccion 
+        private Dictionary<Rectangle, int> _keep = new Dictionary<Rectangle, int>();
 
 
 
@@ -158,72 +167,6 @@ namespace ContarPersonas
             return (this.resizeFactor == 1.0) ? image.Convert<Gray, Byte>() : image.Convert<Gray, Byte>().Resize(this.resizeFactor, Inter.Cubic) ;
         }
 
-        public int RecognizeFacesTriple(Image<Bgr, byte> image,  int precision)
-        {
-            using (var greyFrame = ConvertirGris(image))
-            {
-                if (this.eq)
-                {
-                    greyFrame._EqualizeHist();
-                }
-
-
-
-                Size maxFaceSize = new Size((int)(150 * this.resizeFactor), (int)(150 * this.resizeFactor));
-                Size maxBodySize = new Size((int)(160 * this.resizeFactor), (int)(240 * this.resizeFactor));
-
-                // haarcascade ya esta paralelizado, no tiene sentido correrlo en paralelo
-                var haarAlt2 = new CascadeClassifier(Application.StartupPath + "/" + "haarcascade_frontalface_alt2.xml");
-                Rectangle[] facesAlt2 = haarAlt2.DetectMultiScale(greyFrame, this.scaleFactor, precision);
-                ScaleBack(facesAlt2);
-                haarAlt2.Dispose();
-                
-                var haarDef =
-                    new CascadeClassifier(Application.StartupPath + "/" + "haarcascade_frontalface_default.xml");
-                Rectangle[] facesDef = haarDef.DetectMultiScale(greyFrame, this.scaleFactor, precision);
-                ScaleBack(facesDef);
-                haarDef.Dispose();
-
-
-                var haarProfile = new CascadeClassifier(Application.StartupPath + "/" + "haarcascade_profileface.xml");
-                Rectangle[] facesProfile = haarProfile.DetectMultiScale(greyFrame, this.scaleFactor, precision);
-                ScaleBack(facesProfile);
-                haarProfile.Dispose();
-
-
-
-                var mergedFaces = MergeRectangles(facesProfile.Concat(facesAlt2), 0.4);
-                mergedFaces = MergeRectangles(mergedFaces, 0.4);
-
-
-
-                //Util.GuardarJPGToDisk(greyFrame.Bitmap, filename + "_grey.jpg", 70);
-
-                foreach (Rectangle face in mergedFaces)
-                {
-                    if (!facesAlt2.Contains(face) && !facesProfile.Contains(face))
-                    {
-                        //image.Draw(face, new Bgr(Color.DarkOrange), 2);
-                    }
-                }
-
-                foreach (Rectangle face in facesAlt2)
-                {
-                    image.Draw(face, new Bgr(Color.Red), 1);
-                }
-                foreach (Rectangle face in facesProfile)
-                {
-                    image.Draw(face, new Bgr(Color.Yellow), 1);
-                }
-                foreach (Rectangle face in facesDef)
-                {
-                    image.Draw(face, new Bgr(Color.Aqua), 1);
-                }
-
-
-                return mergedFaces.Count;
-            }
-        }
 
         private CascadeClassifier haarAlt2 = null;
         private CascadeClassifier haarProfile = null;
@@ -260,17 +203,72 @@ namespace ContarPersonas
         }
 
 
-        public IList<Rectangle> RecognizeUpper(Image<Bgr, byte> image, int precision, IList<Rectangle> ROIs = null)
+        public IList<Rectangle> RecognizeHOG(Image<Bgr, byte> image,int precision)
         {
-            this.resizeFactor = 0.5;
+            this.resizeFactor = this.ResizeFactorBodies;
             var roiExpansion = 25;
+            Rectangle[] bodies = new Rectangle[0];
             using (var greyFrame = ConvertirGris(image))
             {
-                if (true)
+                if (this.eq)
                 {
                     greyFrame._EqualizeHist();
                 }
-                if (ROIs == null || ROIs.Count == 0)
+                try
+                {
+                    bodies = hog.DetectMultiScale(greyFrame,finalThreshold: precision).Select(d => d.Rect).ToArray();
+                    ScaleBack(bodies);
+                }
+                catch (Exception ex)
+                {
+                    Debug.WriteLine(ex);
+                }
+            }
+            var allBodies = UpdateTTLDict(_keep, bodies);
+            foreach (Rectangle face in allBodies)
+            {
+                image.Draw(face, new Bgr(Color.Red), 2);
+            }
+
+            return allBodies;
+
+        }
+
+        private List<Rectangle> UpdateTTLDict(Dictionary<Rectangle,int> dict, IList<Rectangle> newRecs)
+        {
+            // eliminar rectangulos con TTL = 0
+            var toRemove = new HashSet<Rectangle>(dict.Where(a => a.Value <= 1).Select(b => b.Key));
+            foreach (var old in dict.Keys)
+            {
+                foreach (var nuevo in newRecs)
+                {
+                    if (nuevo.IntersectsWith(old))
+                    {
+                        toRemove.Add(old);
+                    }
+                }
+            }
+            var tmp = dict.Where(f => !toRemove.Contains(f.Key)).ToList();
+            dict.Clear();
+            tmp.ForEach(keyVal => dict.Add(keyVal.Key, keyVal.Value - 1)); // Quita 1 al TTL
+            foreach (var rec in newRecs)
+            {
+                dict.Add(rec, ttl);
+            }
+            return new List<Rectangle>(dict.Keys);
+        }
+
+        public IList<Rectangle> RecognizeUpper(Image<Bgr, byte> image, int precision, IList<Rectangle> ROIs = null)
+        {
+            this.resizeFactor = this.ResizeFactorBodies;
+            var roiExpansion = 50;
+            using (var greyFrame = ConvertirGris(image))
+            {
+                if (this.eq)
+                {
+                    greyFrame._EqualizeHist();
+                }
+                if (ROIs == null)
                 {
                     ROIs = new Rectangle[] {Rectangle.Empty};
                 }
@@ -285,17 +283,11 @@ namespace ContarPersonas
                         expanded = MergeRectangles(expanded, 0.3);
                     }
                     ROIs = expanded.ToArray();
-                    /*var mergedRec = new Rectangle(ROIs[0].Location,ROIs[0].Size);
-                    for (int i = 1; i < ROIs.Length; i++)
-                    {
-                        mergedRec = Rectangle.Union(mergedRec,ROIs[i]);
-                    }
-                    ROIs = new Rectangle[] { new Rectangle(0,0,100,100), };*/
                 }
-                Size maxFaceSize = new Size((int) (150 * this.resizeFactor), (int) (150 * this.resizeFactor));
+                //Size maxFaceSize = new Size((int) (150 * this.resizeFactor), (int) (150 * this.resizeFactor));
                 // Size maxBodySize = new Size((int)(160 * this.resizeFactor), (int)(240 * this.resizeFactor));
-                List<Rectangle> allFacesAlt2 = new List<Rectangle>();
-                List<Rectangle> allFacesProfile = new List<Rectangle>();
+
+                List<Rectangle> allBodies = new List<Rectangle>();
                 var scaledRois = ROIs.Select(Scaled).ToArray();
                 var frameRec = new Rectangle(0, 0, greyFrame.Width, greyFrame.Height);
                 foreach (var roi in scaledRois)
@@ -303,69 +295,46 @@ namespace ContarPersonas
                     roi.Intersect(frameRec);
                     greyFrame.ROI = roi;
 
-                    /*var facesAlt2 = haarAlt2.DetectMultiScale(greyFrame, this.scaleFactor, precision);
-                    // corrigo por la region de interes
-                    Offset(facesAlt2, roi);
-                    ScaleBack(facesAlt2); // escalo de vuelta para compensar por el resize
-                    allFacesAlt2.AddRange(facesAlt2);*/
 
-                    var facesProfile = haarUpper.DetectMultiScale(greyFrame, this.scaleFactor, precision);
-                    //var facesProfile = hog.DetectMultiScale(greyFrame).Select(d => d.Rect).ToArray();
-                    Offset(facesProfile, roi);
-                    ScaleBack(facesProfile);
-                    allFacesProfile.AddRange(facesProfile);
-                }
-
-
-                //greyFrame.ROI = Rectangle.Empty;
-                var mergedFaces = MergeRectangles(allFacesProfile.Concat(allFacesAlt2), 0.4);
-                mergedFaces = MergeRectangles(mergedFaces, 0.4);
-                // eliminar rectangulos con TTL = 0
-                var toRemove = new HashSet<Rectangle>(_detections.Where(a => a.Value <= 1).Select(b => b.Key));
-                foreach (var old in _detections.Keys)
-                {
-                    foreach (var nuevo in mergedFaces)
+                    try
                     {
-                        if (nuevo.IntersectsWith(old))
-                        {
-                            toRemove.Add(old);
-                        }
+                        var bodies = haarUpper.DetectMultiScale(greyFrame, this.scaleFactor, precision);
+
+                        Offset(bodies, roi);
+                        ScaleBack(bodies);
+                        allBodies.AddRange(bodies);
+                        Debug.WriteLine(" Rect: [{0},{1},{2},{3}]", roi.Left, roi.Top, roi.Width, roi.Height);
+                    }
+                    catch (Exception ex)
+                    {
+
+                        
                     }
                 }
-                var tmp = _detections.Where(f => !toRemove.Contains(f.Key)).ToList();
-                _detections.Clear();
-                tmp.ForEach(keyVal => _detections.Add(keyVal.Key, keyVal.Value - 1)); // Quita 1 al TTL
-                mergedFaces.ForEach(rec => _detections.Add(rec, ttl));
+                UpdateTTLDict(_detections, allBodies);
+                allBodies = UpdateTTLDict(_keep, allBodies);
 
-                foreach (Rectangle face in mergedFaces)
+                foreach (Rectangle face in allBodies)
                 {
-                    if (!allFacesAlt2.Contains(face) && !allFacesProfile.Contains(face))
+                    image.Draw(face, new Bgr(Color.Red), 2);
+                }
+
+                if (ShowROI)
+                {
+                    foreach (Rectangle face in ROIs)
                     {
-                        image.Draw(face, new Bgr(Color.DarkOrange), 2);
+                        image.Draw(face, new Bgr(Color.BlueViolet), 1);
                     }
                 }
 
-                foreach (Rectangle face in allFacesAlt2)
-                {
-                    image.Draw(face, new Bgr(Color.Red), 1);
-                }
-                foreach (Rectangle face in allFacesProfile)
-                {
-                    image.Draw(face, new Bgr(Color.Yellow), 1);
-                }
-                foreach (Rectangle face in ROIs)
-                {
-                    image.Draw(face, new Bgr(Color.BlueViolet), 1);
-                }
 
-                this.resizeFactor = 1;
-
-                return mergedFaces;
+                return allBodies;
             }
         }
 
         public IList<Rectangle> RecognizeFacesDuo(Image<Bgr, byte> image, int precision, IList<Rectangle> ROIs = null)
         {
+            this.resizeFactor = ResizeFactorFaces;
             var roiExpansion = 25;
             var maxFace = (int)(image.Height * 0.25 * this.resizeFactor);
             Size maxFaceSize = new Size(maxFace, maxFace);
@@ -375,7 +344,7 @@ namespace ContarPersonas
                 {
                     greyFrame._EqualizeHist();
                 }
-                if (ROIs == null || ROIs.Count == 0)
+                if (ROIs == null )
                 {
                     ROIs = new Rectangle[] {Rectangle.Empty};
                 }
@@ -389,15 +358,7 @@ namespace ContarPersonas
                         expanded = MergeRectangles(expanded, 0.5);
                     }
                     ROIs = expanded.ToArray();
-                    /*var mergedRec = new Rectangle(ROIs[0].Location,ROIs[0].Size);
-                    for (int i = 1; i < ROIs.Length; i++)
-                    {
-                        mergedRec = Rectangle.Union(mergedRec,ROIs[i]);
-                    }
-                    ROIs = new Rectangle[] { new Rectangle(0,0,100,100), };*/
-                }
-                var total = 0;
-                 
+                }                 
                 // Size maxBodySize = new Size((int)(160 * this.resizeFactor), (int)(240 * this.resizeFactor));
                 List<Rectangle> allFacesAlt2 = new List<Rectangle>();
                 List<Rectangle> allFacesProfile = new List<Rectangle>();
@@ -424,39 +385,30 @@ namespace ContarPersonas
                 //greyFrame.ROI = Rectangle.Empty;
                 var mergedFaces = MergeRectangles(allFacesProfile.Concat(allFacesAlt2), 0.4);
                 mergedFaces = MergeRectangles(mergedFaces, 0.4);
-                // eliminar rectangulos con TTL = 0
-                var toRemove = new HashSet<Rectangle>(_detections.Where(a => a.Value <= 1).Select(b => b.Key));
-                foreach (var old in _detections.Keys)
-                {
-                    foreach (var nuevo in mergedFaces)
-                    {
-                        if (nuevo.IntersectsWith(old))
-                        {
-                            toRemove.Add(old);
-                        }
-                    }
-                }
-                var tmp = _detections.Where(f => !toRemove.Contains(f.Key)).ToList();
-                _detections.Clear();
-                tmp.ForEach(keyVal => _detections.Add(keyVal.Key, keyVal.Value - 1)); // Quita 1 al TTL
-                mergedFaces.ForEach(rec => _detections.Add(rec, ttl));
+
+                UpdateTTLDict(_detections, mergedFaces);
+
+                mergedFaces = UpdateTTLDict(_keep, mergedFaces);
 
                 foreach (Rectangle face in mergedFaces)
                 {
-                    if (!allFacesAlt2.Contains(face) && !allFacesProfile.Contains(face))
+                    // no dibujar si la cara esta exactamente en alt2 o profile y ColorHaarCascade es verdadero
+                    if (this.ColorHaarCascade && (allFacesAlt2.Contains(face) || allFacesProfile.Contains(face))) continue;;
+                    
+                    image.Draw(face, new Bgr(Color.DarkOrange), 2);
+                }
+                if (this.ColorHaarCascade)
+                {
+                    foreach (Rectangle face in allFacesAlt2)
                     {
-                        image.Draw(face, new Bgr(Color.DarkOrange), 2);
+                        image.Draw(face, new Bgr(Color.Red), 1);
+                    }
+                    foreach (Rectangle face in allFacesProfile)
+                    {
+                        image.Draw(face, new Bgr(Color.Yellow), 1);
                     }
                 }
 
-                foreach (Rectangle face in allFacesAlt2)
-                {
-                    image.Draw(face, new Bgr(Color.Red), 1);
-                }
-                foreach (Rectangle face in allFacesProfile)
-                {
-                    image.Draw(face, new Bgr(Color.Yellow), 1);
-                }
                 if (ShowROI)
                 {
                     foreach (Rectangle face in ROIs)
@@ -464,131 +416,11 @@ namespace ContarPersonas
                         image.Draw(face, new Bgr(Color.BlueViolet), 1);
                     }
                 }
-
-                total += mergedFaces.Count;
-
-
-
+ 
                 return mergedFaces;
             }
         }
 
-        
-
-
-
-
-        public int RecognizeFacesComplex(Image<Bgr, byte> image, int precision )
-        {
-            using (var greyFrame = ConvertirGris(image))
-            {
-                if (this.eq)
-                {
-                    greyFrame._EqualizeHist();
-                }
-
-
-
-                Size maxFaceSize = new Size((int)(100 * this.resizeFactor), (int)(100 * this.resizeFactor));
-                Size maxBodySize = new Size((int)(160 * this.resizeFactor), (int)(240 * this.resizeFactor));
-
-                // haarcascade ya esta paralelizado, no tiene sentido correrlo en paralelo
-                var haarAlt2 = new CascadeClassifier(Application.StartupPath + "/" + "haarcascade_frontalface_alt2.xml");
-                Rectangle[] facesAlt2 = haarAlt2.DetectMultiScale(greyFrame, this.scaleFactor, precision);
-                ScaleBack(facesAlt2);
-                haarAlt2.Dispose();
-                /*
-                var haarDef =
-                    new CascadeClassifier(Application.StartupPath + "/" + "haarcascade_frontalface_default.xml");
-                Rectangle[] facesDef = haarDef.DetectMultiScale(greyFrame, scale, 5, maxSize: maxFaceSize);
-                Array.ForEach(facesDef, ScaleBack);
-                haarDef.Dispose();*/
-
-
-                var haarProfile = new CascadeClassifier(Application.StartupPath + "/" + "haarcascade_profileface.xml");
-                Rectangle[] facesProfile = haarProfile.DetectMultiScale(greyFrame, this.scaleFactor, Math.Max(precision - 1,1),
-                    maxSize: maxFaceSize);
-                ScaleBack(facesProfile);
-                haarProfile.Dispose();
-
-
-                var haarUpper = new CascadeClassifier(Application.StartupPath + "/" + "haarcascade_upperbody.xml");
-                Rectangle[] facesUpper = haarUpper.DetectMultiScale(greyFrame, this.scaleFactor, precision, maxSize: maxBodySize );
-                ScaleBack(facesUpper);
-                haarUpper.Dispose();
-
-                var haarFull = new CascadeClassifier(Application.StartupPath + "/" + "haarcascade_fullbody.xml");
-                Rectangle[] facesFull = haarFull.DetectMultiScale(greyFrame, this.scaleFactor, precision + 1, maxSize: maxBodySize);
-                ScaleBack(facesFull);
-                haarFull.Dispose();
-
-
-                var mergedFaces = MergeRectangles(facesProfile.Concat(facesAlt2),0.4);
-                mergedFaces = MergeRectangles(mergedFaces, 0.4);
-                var mergedBodies = MergeRectangles(facesFull.Concat(facesUpper),0.5);
-                mergedBodies = MergeRectangles(mergedBodies, 0.5);
-                var mergedAll = MergeUpper(mergedBodies, mergedFaces, 0.25,0.4);
-
-
-                //Util.GuardarJPGToDisk(greyFrame.Bitmap, filename + "_grey.jpg", 70);
-
-                foreach (Rectangle face in mergedFaces)
-                {
-                    image.Draw(face, new Bgr(Color.DarkOrange), 2);
-                }
-                foreach (Rectangle face in mergedBodies)
-                {
-                    image.Draw(face, new Bgr(Color.Blue), 2);
-                }
-                foreach (Rectangle face in mergedAll)
-                {
-                    image.Draw(face, new Bgr(Color.Lime), 2);
-                }
-
-                /*foreach (Rectangle face in facesAlt2)
-                {
-                    image.Draw(face, new Bgr(Color.Red), 1);
-                }
-                foreach (Rectangle face in facesProfile)
-                {
-                    image.Draw(face, new Bgr(Color.DarkOrange), 1);
-                }
-
-                foreach (Rectangle face in facesFull)
-                {
-                    image.Draw(face, new Bgr(Color.Lime), 1);
-                }
-                foreach (Rectangle face in facesUpper)
-                {
-                    image.Draw(face, new Bgr(Color.Cyan), 1);
-                }*/
-
-                return mergedFaces.Count + mergedBodies.Count + mergedAll.Count;
-            }
-        }
-
-        public int RecognizeFaces(int precision, Image<Bgr, byte> image, CascadeClassifier cascade)
-        {
-            using (var greyFrame = ConvertirGris(image))
-            {
-                if (this.eq)
-                {
-                    greyFrame._EqualizeHist();
-                }
-
-
-                int minNeighboors = precision;
-                // cascade ya esta paralelizado, no tiene sentido correrlo en paralelo
-                Rectangle[] faces = cascade.DetectMultiScale(greyFrame, this.scaleFactor, minNeighboors);
-
-
-                var red = new Bgr(0, 0, 255);
-                foreach (Rectangle face in faces)
-                {
-                    image.Draw(face, red, 2);
-                }
-                return faces.Length;
-            }
-        }
+ 
     }
 }

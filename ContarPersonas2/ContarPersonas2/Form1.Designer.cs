@@ -34,7 +34,6 @@
             this.rbWeb = new System.Windows.Forms.RadioButton();
             this.btArchivo = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
-            this.txtFuente = new System.Windows.Forms.TextBox();
             this.btConectar = new System.Windows.Forms.Button();
             this.rbArchivo = new System.Windows.Forms.RadioButton();
             this.rbIP = new System.Windows.Forms.RadioButton();
@@ -85,6 +84,28 @@
             this.trackGeneroHistoria = new System.Windows.Forms.TrackBar();
             this.label6 = new System.Windows.Forms.Label();
             this.label7 = new System.Windows.Forms.Label();
+            this.label12 = new System.Windows.Forms.Label();
+            this.comboBox1 = new System.Windows.Forms.ComboBox();
+            this.label13 = new System.Windows.Forms.Label();
+            this.trackBar1 = new System.Windows.Forms.TrackBar();
+            this.label14 = new System.Windows.Forms.Label();
+            this.label15 = new System.Windows.Forms.Label();
+            this.lblPrecision = new System.Windows.Forms.Label();
+            this.label16 = new System.Windows.Forms.Label();
+            this.label17 = new System.Windows.Forms.Label();
+            this.cboxResFaces = new System.Windows.Forms.ComboBox();
+            this.cboxResBodies = new System.Windows.Forms.ComboBox();
+            this.label18 = new System.Windows.Forms.Label();
+            this.trackBar2 = new System.Windows.Forms.TrackBar();
+            this.lblKeep = new System.Windows.Forms.Label();
+            this.ckShowHaar = new System.Windows.Forms.CheckBox();
+            this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.groupBox4 = new System.Windows.Forms.GroupBox();
+            this.groupBox5 = new System.Windows.Forms.GroupBox();
+            this.label19 = new System.Windows.Forms.Label();
+            this.ckShowGender = new System.Windows.Forms.CheckBox();
+            this.ckShowGenConfidence = new System.Windows.Forms.CheckBox();
+            this.txtFuente = new System.Windows.Forms.ComboBox();
             ((System.ComponentModel.ISupportInitialize)(this.imageBox)).BeginInit();
             this.panel1.SuspendLayout();
             this.tabControl1.SuspendLayout();
@@ -105,6 +126,11 @@
             this.tabConfig.SuspendLayout();
             this.groupBox2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.trackGeneroHistoria)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.trackBar1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.trackBar2)).BeginInit();
+            this.groupBox3.SuspendLayout();
+            this.groupBox4.SuspendLayout();
+            this.groupBox5.SuspendLayout();
             this.SuspendLayout();
             // 
             // imageBox
@@ -112,7 +138,7 @@
             this.imageBox.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.imageBox.Location = new System.Drawing.Point(8, 156);
+            this.imageBox.Location = new System.Drawing.Point(8, 206);
             this.imageBox.Name = "imageBox";
             this.imageBox.Size = new System.Drawing.Size(720, 360);
             this.imageBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -124,10 +150,10 @@
             // 
             this.panel1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.panel1.Controls.Add(this.txtFuente);
             this.panel1.Controls.Add(this.rbWeb);
             this.panel1.Controls.Add(this.btArchivo);
             this.panel1.Controls.Add(this.label1);
-            this.panel1.Controls.Add(this.txtFuente);
             this.panel1.Controls.Add(this.btConectar);
             this.panel1.Controls.Add(this.rbArchivo);
             this.panel1.Controls.Add(this.rbIP);
@@ -165,16 +191,6 @@
             this.label1.TabIndex = 4;
             this.label1.Text = "Fuente:";
             // 
-            // txtFuente
-            // 
-            this.txtFuente.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtFuente.Location = new System.Drawing.Point(15, 55);
-            this.txtFuente.Name = "txtFuente";
-            this.txtFuente.Size = new System.Drawing.Size(690, 20);
-            this.txtFuente.TabIndex = 3;
-            this.txtFuente.Text = "rtsp://{user}:{pass}@fx2.no-ip.org:554";
-            // 
             // btConectar
             // 
             this.btConectar.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
@@ -211,7 +227,7 @@
             // txtCantidad
             // 
             this.txtCantidad.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtCantidad.Location = new System.Drawing.Point(823, 103);
+            this.txtCantidad.Location = new System.Drawing.Point(864, 108);
             this.txtCantidad.Name = "txtCantidad";
             this.txtCantidad.ReadOnly = true;
             this.txtCantidad.Size = new System.Drawing.Size(100, 20);
@@ -245,6 +261,13 @@
             // 
             // tabVideo
             // 
+            this.tabVideo.Controls.Add(this.lblPrecision);
+            this.tabVideo.Controls.Add(this.label15);
+            this.tabVideo.Controls.Add(this.label14);
+            this.tabVideo.Controls.Add(this.trackBar1);
+            this.tabVideo.Controls.Add(this.label13);
+            this.tabVideo.Controls.Add(this.comboBox1);
+            this.tabVideo.Controls.Add(this.label12);
             this.tabVideo.Controls.Add(this.lblPos);
             this.tabVideo.Controls.Add(this.btSeek);
             this.tabVideo.Controls.Add(this.pickerInicio);
@@ -324,7 +347,7 @@
             // 
             this.ckUseGender.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.ckUseGender.AutoSize = true;
-            this.ckUseGender.Location = new System.Drawing.Point(751, 129);
+            this.ckUseGender.Location = new System.Drawing.Point(751, 136);
             this.ckUseGender.Name = "ckUseGender";
             this.ckUseGender.Size = new System.Drawing.Size(257, 17);
             this.ckUseGender.TabIndex = 15;
@@ -376,11 +399,11 @@
             // 
             this.label8.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(767, 106);
+            this.label8.Location = new System.Drawing.Point(748, 109);
             this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(31, 13);
+            this.label8.Size = new System.Drawing.Size(110, 13);
             this.label8.TabIndex = 10;
-            this.label8.Text = "Total";
+            this.label8.Text = "Personas detectadas:";
             // 
             // gridMujeres
             // 
@@ -646,8 +669,9 @@
             // 
             // tabConfig
             // 
-            this.tabConfig.Controls.Add(this.ckShowCenters);
-            this.tabConfig.Controls.Add(this.ckShowROI);
+            this.tabConfig.Controls.Add(this.groupBox5);
+            this.tabConfig.Controls.Add(this.groupBox4);
+            this.tabConfig.Controls.Add(this.groupBox3);
             this.tabConfig.Controls.Add(this.groupBox2);
             this.tabConfig.Location = new System.Drawing.Point(4, 22);
             this.tabConfig.Name = "tabConfig";
@@ -659,7 +683,7 @@
             // ckShowCenters
             // 
             this.ckShowCenters.AutoSize = true;
-            this.ckShowCenters.Location = new System.Drawing.Point(22, 49);
+            this.ckShowCenters.Location = new System.Drawing.Point(17, 63);
             this.ckShowCenters.Name = "ckShowCenters";
             this.ckShowCenters.Size = new System.Drawing.Size(151, 17);
             this.ckShowCenters.TabIndex = 5;
@@ -672,7 +696,7 @@
             this.ckShowROI.AutoSize = true;
             this.ckShowROI.Checked = true;
             this.ckShowROI.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.ckShowROI.Location = new System.Drawing.Point(22, 17);
+            this.ckShowROI.Location = new System.Drawing.Point(17, 31);
             this.ckShowROI.Name = "ckShowROI";
             this.ckShowROI.Size = new System.Drawing.Size(187, 17);
             this.ckShowROI.TabIndex = 4;
@@ -682,14 +706,17 @@
             // 
             // groupBox2
             // 
+            this.groupBox2.Controls.Add(this.ckShowGenConfidence);
+            this.groupBox2.Controls.Add(this.ckShowGender);
+            this.groupBox2.Controls.Add(this.label19);
             this.groupBox2.Controls.Add(this.cboxGeneroModelo);
             this.groupBox2.Controls.Add(this.lblGeneroHistoria);
             this.groupBox2.Controls.Add(this.trackGeneroHistoria);
             this.groupBox2.Controls.Add(this.label6);
             this.groupBox2.Controls.Add(this.label7);
-            this.groupBox2.Location = new System.Drawing.Point(22, 81);
+            this.groupBox2.Location = new System.Drawing.Point(22, 261);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(515, 139);
+            this.groupBox2.Size = new System.Drawing.Size(515, 167);
             this.groupBox2.TabIndex = 3;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Detección de Genero OpenCV";
@@ -706,16 +733,16 @@
             // lblGeneroHistoria
             // 
             this.lblGeneroHistoria.AutoSize = true;
-            this.lblGeneroHistoria.Location = new System.Drawing.Point(479, 75);
+            this.lblGeneroHistoria.Location = new System.Drawing.Point(482, 109);
             this.lblGeneroHistoria.Name = "lblGeneroHistoria";
-            this.lblGeneroHistoria.Size = new System.Drawing.Size(13, 13);
+            this.lblGeneroHistoria.Size = new System.Drawing.Size(27, 13);
             this.lblGeneroHistoria.TabIndex = 3;
-            this.lblGeneroHistoria.Text = "0";
+            this.lblGeneroHistoria.Text = "75%";
             // 
             // trackGeneroHistoria
             // 
             this.trackGeneroHistoria.LargeChange = 10;
-            this.trackGeneroHistoria.Location = new System.Drawing.Point(107, 63);
+            this.trackGeneroHistoria.Location = new System.Drawing.Point(110, 97);
             this.trackGeneroHistoria.Maximum = 100;
             this.trackGeneroHistoria.Name = "trackGeneroHistoria";
             this.trackGeneroHistoria.Size = new System.Drawing.Size(366, 45);
@@ -737,11 +764,255 @@
             // label7
             // 
             this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(21, 75);
+            this.label7.Location = new System.Drawing.Point(24, 97);
             this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(68, 13);
+            this.label7.Size = new System.Drawing.Size(71, 26);
             this.label7.TabIndex = 1;
-            this.label7.Text = "Usar historia:";
+            this.label7.Text = "Momento\r\nvalor anterior:\r\n";
+            // 
+            // label12
+            // 
+            this.label12.AutoSize = true;
+            this.label12.Location = new System.Drawing.Point(11, 156);
+            this.label12.Name = "label12";
+            this.label12.Size = new System.Drawing.Size(43, 13);
+            this.label12.TabIndex = 22;
+            this.label12.Text = "Buscar:";
+            // 
+            // comboBox1
+            // 
+            this.comboBox1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBox1.FormattingEnabled = true;
+            this.comboBox1.Items.AddRange(new object[] {
+            "Rostros",
+            "Cuerpo superior",
+            "Peatones (HOG)"});
+            this.comboBox1.Location = new System.Drawing.Point(60, 153);
+            this.comboBox1.Name = "comboBox1";
+            this.comboBox1.Size = new System.Drawing.Size(167, 21);
+            this.comboBox1.TabIndex = 23;
+            this.comboBox1.SelectedIndexChanged += new System.EventHandler(this.comboBox1_SelectedIndexChanged);
+            // 
+            // label13
+            // 
+            this.label13.AutoSize = true;
+            this.label13.Location = new System.Drawing.Point(292, 153);
+            this.label13.Name = "label13";
+            this.label13.Size = new System.Drawing.Size(53, 13);
+            this.label13.TabIndex = 24;
+            this.label13.Text = "Precisión:";
+            // 
+            // trackBar1
+            // 
+            this.trackBar1.BackColor = System.Drawing.SystemColors.Window;
+            this.trackBar1.Location = new System.Drawing.Point(404, 137);
+            this.trackBar1.Maximum = 9;
+            this.trackBar1.Minimum = 1;
+            this.trackBar1.Name = "trackBar1";
+            this.trackBar1.Size = new System.Drawing.Size(217, 45);
+            this.trackBar1.TabIndex = 27;
+            this.trackBar1.TickStyle = System.Windows.Forms.TickStyle.Both;
+            this.trackBar1.Value = 3;
+            this.trackBar1.ValueChanged += new System.EventHandler(this.trackBar1_ValueChanged);
+            // 
+            // label14
+            // 
+            this.label14.AutoSize = true;
+            this.label14.Location = new System.Drawing.Point(356, 145);
+            this.label14.Name = "label14";
+            this.label14.Size = new System.Drawing.Size(47, 26);
+            this.label14.TabIndex = 28;
+            this.label14.Text = "Más\r\nSensible";
+            this.label14.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            // 
+            // label15
+            // 
+            this.label15.AutoSize = true;
+            this.label15.Location = new System.Drawing.Point(627, 145);
+            this.label15.Name = "label15";
+            this.label15.Size = new System.Drawing.Size(47, 26);
+            this.label15.TabIndex = 29;
+            this.label15.Text = "Menos\r\nSensible";
+            this.label15.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            // 
+            // lblPrecision
+            // 
+            this.lblPrecision.AutoSize = true;
+            this.lblPrecision.Location = new System.Drawing.Point(700, 153);
+            this.lblPrecision.Name = "lblPrecision";
+            this.lblPrecision.Size = new System.Drawing.Size(13, 13);
+            this.lblPrecision.TabIndex = 30;
+            this.lblPrecision.Text = "3";
+            // 
+            // label16
+            // 
+            this.label16.AutoSize = true;
+            this.label16.Location = new System.Drawing.Point(11, 32);
+            this.label16.Name = "label16";
+            this.label16.Size = new System.Drawing.Size(162, 13);
+            this.label16.TabIndex = 6;
+            this.label16.Text = "Resolución detección de rostros:";
+            // 
+            // label17
+            // 
+            this.label17.AutoSize = true;
+            this.label17.Location = new System.Drawing.Point(11, 58);
+            this.label17.Name = "label17";
+            this.label17.Size = new System.Drawing.Size(169, 13);
+            this.label17.TabIndex = 7;
+            this.label17.Text = "Resolución detección de cuerpos:";
+            // 
+            // cboxResFaces
+            // 
+            this.cboxResFaces.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cboxResFaces.FormattingEnabled = true;
+            this.cboxResFaces.Items.AddRange(new object[] {
+            "100%",
+            "75%",
+            "50%",
+            "33%",
+            "25%"});
+            this.cboxResFaces.Location = new System.Drawing.Point(186, 29);
+            this.cboxResFaces.Name = "cboxResFaces";
+            this.cboxResFaces.Size = new System.Drawing.Size(121, 21);
+            this.cboxResFaces.TabIndex = 8;
+            this.cboxResFaces.SelectedIndexChanged += new System.EventHandler(this.cboxResFaces_SelectedIndexChanged);
+            // 
+            // cboxResBodies
+            // 
+            this.cboxResBodies.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cboxResBodies.FormattingEnabled = true;
+            this.cboxResBodies.Items.AddRange(new object[] {
+            "100%",
+            "75%",
+            "50%",
+            "33%",
+            "25%"});
+            this.cboxResBodies.Location = new System.Drawing.Point(186, 56);
+            this.cboxResBodies.Name = "cboxResBodies";
+            this.cboxResBodies.Size = new System.Drawing.Size(121, 21);
+            this.cboxResBodies.TabIndex = 9;
+            this.cboxResBodies.SelectedIndexChanged += new System.EventHandler(this.cboxResBodies_SelectedIndexChanged);
+            // 
+            // label18
+            // 
+            this.label18.AutoSize = true;
+            this.label18.Location = new System.Drawing.Point(15, 36);
+            this.label18.Name = "label18";
+            this.label18.Size = new System.Drawing.Size(128, 13);
+            this.label18.TabIndex = 10;
+            this.label18.Text = "Mantener viva detección:";
+            // 
+            // trackBar2
+            // 
+            this.trackBar2.Location = new System.Drawing.Point(161, 19);
+            this.trackBar2.Maximum = 5;
+            this.trackBar2.Name = "trackBar2";
+            this.trackBar2.Size = new System.Drawing.Size(244, 45);
+            this.trackBar2.TabIndex = 11;
+            this.trackBar2.TickStyle = System.Windows.Forms.TickStyle.Both;
+            this.trackBar2.Value = 1;
+            this.trackBar2.ValueChanged += new System.EventHandler(this.trackBar2_ValueChanged);
+            // 
+            // lblKeep
+            // 
+            this.lblKeep.AutoSize = true;
+            this.lblKeep.Location = new System.Drawing.Point(429, 36);
+            this.lblKeep.Name = "lblKeep";
+            this.lblKeep.Size = new System.Drawing.Size(47, 13);
+            this.lblKeep.TabIndex = 12;
+            this.lblKeep.Text = "1 frames";
+            // 
+            // ckShowHaar
+            // 
+            this.ckShowHaar.AutoSize = true;
+            this.ckShowHaar.Location = new System.Drawing.Point(17, 94);
+            this.ckShowHaar.Name = "ckShowHaar";
+            this.ckShowHaar.Size = new System.Drawing.Size(308, 30);
+            this.ckShowHaar.TabIndex = 13;
+            this.ckShowHaar.Text = "Mostrar en rojo rostros frontales y en amarillo rostros de perfil\r\n(en anaranjado" +
+    " detecciones por ambos)\r\n";
+            this.ckShowHaar.UseVisualStyleBackColor = true;
+            this.ckShowHaar.CheckedChanged += new System.EventHandler(this.ckShowHaar_CheckedChanged);
+            // 
+            // groupBox3
+            // 
+            this.groupBox3.Controls.Add(this.trackBar2);
+            this.groupBox3.Controls.Add(this.label18);
+            this.groupBox3.Controls.Add(this.lblKeep);
+            this.groupBox3.Location = new System.Drawing.Point(22, 164);
+            this.groupBox3.Name = "groupBox3";
+            this.groupBox3.Size = new System.Drawing.Size(518, 80);
+            this.groupBox3.TabIndex = 14;
+            this.groupBox3.TabStop = false;
+            // 
+            // groupBox4
+            // 
+            this.groupBox4.Controls.Add(this.cboxResBodies);
+            this.groupBox4.Controls.Add(this.label16);
+            this.groupBox4.Controls.Add(this.label17);
+            this.groupBox4.Controls.Add(this.cboxResFaces);
+            this.groupBox4.Location = new System.Drawing.Point(386, 22);
+            this.groupBox4.Name = "groupBox4";
+            this.groupBox4.Size = new System.Drawing.Size(323, 92);
+            this.groupBox4.TabIndex = 15;
+            this.groupBox4.TabStop = false;
+            this.groupBox4.Text = "Resolución";
+            // 
+            // groupBox5
+            // 
+            this.groupBox5.Controls.Add(this.ckShowROI);
+            this.groupBox5.Controls.Add(this.ckShowCenters);
+            this.groupBox5.Controls.Add(this.ckShowHaar);
+            this.groupBox5.Location = new System.Drawing.Point(22, 22);
+            this.groupBox5.Name = "groupBox5";
+            this.groupBox5.Size = new System.Drawing.Size(349, 136);
+            this.groupBox5.TabIndex = 16;
+            this.groupBox5.TabStop = false;
+            this.groupBox5.Text = "Visualizar";
+            // 
+            // label19
+            // 
+            this.label19.AutoSize = true;
+            this.label19.Location = new System.Drawing.Point(24, 70);
+            this.label19.Name = "label19";
+            this.label19.Size = new System.Drawing.Size(97, 13);
+            this.label19.TabIndex = 5;
+            this.label19.Text = "Mostrar en imagen:";
+            // 
+            // ckShowGender
+            // 
+            this.ckShowGender.AutoSize = true;
+            this.ckShowGender.Checked = true;
+            this.ckShowGender.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.ckShowGender.Location = new System.Drawing.Point(139, 69);
+            this.ckShowGender.Name = "ckShowGender";
+            this.ckShowGender.Size = new System.Drawing.Size(61, 17);
+            this.ckShowGender.TabIndex = 6;
+            this.ckShowGender.Text = "Género";
+            this.ckShowGender.UseVisualStyleBackColor = true;
+            this.ckShowGender.CheckedChanged += new System.EventHandler(this.ckShowGender_CheckedChanged);
+            // 
+            // ckShowGenConfidence
+            // 
+            this.ckShowGenConfidence.AutoSize = true;
+            this.ckShowGenConfidence.Checked = true;
+            this.ckShowGenConfidence.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.ckShowGenConfidence.Location = new System.Drawing.Point(218, 69);
+            this.ckShowGenConfidence.Name = "ckShowGenConfidence";
+            this.ckShowGenConfidence.Size = new System.Drawing.Size(82, 17);
+            this.ckShowGenConfidence.TabIndex = 7;
+            this.ckShowGenConfidence.Text = "Confidencia";
+            this.ckShowGenConfidence.UseVisualStyleBackColor = true;
+            this.ckShowGenConfidence.CheckedChanged += new System.EventHandler(this.ckShowGenConfidence_CheckedChanged);
+            // 
+            // txtFuente
+            // 
+            this.txtFuente.FormattingEnabled = true;
+            this.txtFuente.Location = new System.Drawing.Point(15, 52);
+            this.txtFuente.Name = "txtFuente";
+            this.txtFuente.Size = new System.Drawing.Size(690, 21);
+            this.txtFuente.TabIndex = 7;
             // 
             // Form1
             // 
@@ -750,7 +1021,7 @@
             this.ClientSize = new System.Drawing.Size(1035, 627);
             this.Controls.Add(this.tabControl1);
             this.Name = "Form1";
-            this.Text = "Form1";
+            this.Text = "Detectar Rostros";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form1_FormClosing);
             this.Load += new System.EventHandler(this.Form1_Load);
             this.ResizeBegin += new System.EventHandler(this.Form1_ResizeBegin);
@@ -780,10 +1051,17 @@
             this.panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.imageBoxMask)).EndInit();
             this.tabConfig.ResumeLayout(false);
-            this.tabConfig.PerformLayout();
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.trackGeneroHistoria)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.trackBar1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.trackBar2)).EndInit();
+            this.groupBox3.ResumeLayout(false);
+            this.groupBox3.PerformLayout();
+            this.groupBox4.ResumeLayout(false);
+            this.groupBox4.PerformLayout();
+            this.groupBox5.ResumeLayout(false);
+            this.groupBox5.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -794,7 +1072,6 @@
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.Button btArchivo;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.TextBox txtFuente;
         private System.Windows.Forms.Button btConectar;
         private System.Windows.Forms.RadioButton rbArchivo;
         private System.Windows.Forms.RadioButton rbIP;
@@ -846,6 +1123,28 @@
         private System.Windows.Forms.Label lblPos;
         private System.Windows.Forms.CheckBox ckShowCenters;
         private System.Windows.Forms.CheckBox ckShowROI;
+        private System.Windows.Forms.ComboBox comboBox1;
+        private System.Windows.Forms.Label label12;
+        private System.Windows.Forms.Label lblPrecision;
+        private System.Windows.Forms.Label label15;
+        private System.Windows.Forms.Label label14;
+        private System.Windows.Forms.TrackBar trackBar1;
+        private System.Windows.Forms.Label label13;
+        private System.Windows.Forms.ComboBox cboxResBodies;
+        private System.Windows.Forms.ComboBox cboxResFaces;
+        private System.Windows.Forms.Label label17;
+        private System.Windows.Forms.Label label16;
+        private System.Windows.Forms.Label lblKeep;
+        private System.Windows.Forms.TrackBar trackBar2;
+        private System.Windows.Forms.Label label18;
+        private System.Windows.Forms.CheckBox ckShowHaar;
+        private System.Windows.Forms.GroupBox groupBox5;
+        private System.Windows.Forms.GroupBox groupBox4;
+        private System.Windows.Forms.GroupBox groupBox3;
+        private System.Windows.Forms.CheckBox ckShowGenConfidence;
+        private System.Windows.Forms.CheckBox ckShowGender;
+        private System.Windows.Forms.Label label19;
+        private System.Windows.Forms.ComboBox txtFuente;
     }
 }
 

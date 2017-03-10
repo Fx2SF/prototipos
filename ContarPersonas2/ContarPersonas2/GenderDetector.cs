@@ -185,7 +185,7 @@ namespace ContarPersonas2
             public Image<Bgr,byte> Image { get; set; }
         }
 
-        public IList<GenderPrediction> FindGender(Image<Bgr, byte> image, IList<Rectangle> faces,bool draw = true)
+        public IList<GenderPrediction> FindGender(Image<Bgr, byte> image, IList<Rectangle> faces,bool showGender = true,bool showConfidence = true,bool drawRoI = true)
         {
             var listRes = new List<GenderPrediction>();
             using (var gray2 = image.Convert<Gray, byte>())
@@ -194,15 +194,22 @@ namespace ContarPersonas2
                 {
                     var gen = this.Predict(gray2, face);
                     listRes.Add(gen);
-                    if (draw)
+                    if (showGender)
                     {
                         string gender = "?";
-                        if (gen.Gender == GenderDetector.GenderLabel.Male) gender = "M";
-                        else if (gen.Gender == GenderDetector.GenderLabel.Female) gender = "F";
-                        image.Draw(
-                            String.Format("{0} {1:n0}", gender,
-                                gen.Distance), new Point(face.Left, Math.Max(face.Top - 5, 0)), FontFace.HersheyComplex, 1.0,
-                            new Bgr(Color.Red));
+                        if (!gen.IsUncertain)
+                        {
+                            if (gen.Gender == GenderDetector.GenderLabel.Male) gender = "M";
+                            else if (gen.Gender == GenderDetector.GenderLabel.Female) gender = "F";
+                            image.Draw(gender, new Point(face.Left, Math.Max(face.Top - 5, 0)), FontFace.HersheyComplex, 1.0, new Bgr(Color.Red));
+                        }  
+                    }
+                    if (showConfidence && !gen.IsUncertain)
+                    {
+                        image.Draw(String.Format("{0:n0}", gen.Distance), new Point(Math.Min(face.Left + 30, image.Width), Math.Max(face.Top - 5, 0)), FontFace.HersheyComplex, 0.756, new Bgr(Color.Red));
+                    }
+                    if (drawRoI)
+                    {
                         image.Draw(gen.Area, new Bgr(Color.Orchid), 1);
                     }
                 }

@@ -1,3 +1,6 @@
+// Nombre; Modelo; Config
 Georgia Tech; GeorgiaTech.fisher; GeorgiaTech.csv
 Yale; Yale2.fisher; Yale2.csv
 IMDB; IMDB_02_240.fisher; IMDB_02_240.fisher.csv
+IMDB (Full); 50_256.fisher; 50_256.fisher.csv
+IMDB (Crop); 02_200_100.fisher; 02_200_100.fisher.csv

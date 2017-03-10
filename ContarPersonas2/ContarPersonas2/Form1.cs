@@ -12,6 +12,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using ContarPersonas;
+using ContarPersonas2.Properties;
 using Emgu.CV;
 using Emgu.CV.BgSegm;
 using Emgu.CV.Cvb;
@@ -56,6 +57,9 @@ namespace ContarPersonas2
         private bool _useGenderDetection = false;
         private bool _showObjects = false;
         private bool _showROI = true;
+        private bool _showGender = true;
+        private bool _showGenderConfidence = true;
+        private int _modoBusqueda = 0;
 
         private int _generoHistoria = 75;
 
@@ -64,6 +68,8 @@ namespace ContarPersonas2
         private GenderDetector _genderDetector = new GenderDetector(fisherModel, fisherConfig);
         // dictionary para aplicar momento en genero
         private Dictionary<uint, double> _labels = new Dictionary<uint, double>();
+
+        int _precision = 3;
 
 
 
@@ -92,6 +98,7 @@ namespace ContarPersonas2
             if (_capture != null)
             {
                 StopCapture();
+                _contar = new ContarPersonasOpenCV();
             }
             pickerInicio.Enabled = rbArchivo.Checked;
             btSeek.Enabled = rbArchivo.Checked;
@@ -127,15 +134,39 @@ namespace ContarPersonas2
                 _timeSinceStart = Stopwatch.StartNew();
                 SetupMotionDetection();
                 _contar.SetupCascades();
-                if (rbArchivo.Checked)
-                {
-
-                }
+                _contar.DetectionKeepTime = trackBar2.Value;
+                _contar.ColorHaarCascade = ckShowHaar.Checked;
+                ConfigRes();
                 _capture.ImageGrabbed += ProcessFrame;
+                txtFuente.Items.Insert(0,txtFuente.Text);
                 _capture.Start();
             }
 
             
+        }
+
+        private void SaveMRU()
+        {
+            var list = txtFuente.Items.OfType<String>().ToList();
+            if (list.Count > 10)
+            {
+                list = list.Take(10).ToList();
+            }
+            Settings.Default.MRU = String.Join(";", list);
+            Settings.Default.Save();
+        }
+
+        private void LoadMRU()
+        {
+            String[] mru = Settings.Default.MRU.Split(';');
+            foreach (var path in mru)
+            {
+                if (path.Trim().Length > 0)
+                {
+                    txtFuente.Items.Add(path);
+                }
+
+            }
         }
 
         private Rectangle[] SkinDetection(Mat frame, out CvBlobs blobs)
@@ -311,7 +342,7 @@ namespace ContarPersonas2
         }
 
 
-        private void AplicarHistoria(CvTracks tracks, IList<GenderDetector.GenderPrediction> predictions)
+        private void AplicarMomento(CvTracks tracks, IList<GenderDetector.GenderPrediction> predictions)
         {
             var newLabels = new Dictionary<uint, double>();
             // aplico momento de valor anterior utilizando el blob mas cercano
@@ -410,7 +441,7 @@ namespace ContarPersonas2
 
                     Rectangle[] recsMotion = blobsMotion.Select(b => b.Value.BoundingBox).ToArray();
 
-                    int precision = 3;
+
                     IList<Rectangle> ROI;
                     var image = frame.ToImage<Bgr, byte>();
                     if (_useMotion && _useSkin)
@@ -443,55 +474,67 @@ namespace ContarPersonas2
                     // copia para sacar caras a mostrar segun genero
                     var genderCopy = image.Copy();
 
+
                     //IList<Rectangle> faceDetections = _contar.RecognizeUpper(image, precision, ROI);
                     _contar.ShowROI = _showROI;
-                    IList<Rectangle> faceDetections = _contar.RecognizeFacesDuo(image, precision, ROI);
+                    IList<Rectangle> faceDetections = new List<Rectangle>();
+                    switch (_modoBusqueda)
+                    {
+                        case 0:
+                            // reconoce caras con FaceAlt2 + FaceProfile
+                            faceDetections = _contar.RecognizeFacesDuo(image, _precision, ROI);
+                            break;
+                        case 1:
+                            // reconoce la parte superior del cuerpo con UpperBody
+                            faceDetections = _contar.RecognizeUpper(image, _precision,  ROI);
+                            break;
+                        case 2:
+                            // reconoce el cuerpo de peatones con HOG Descriptor
+                            faceDetections = _contar.RecognizeHOG(image,_precision);
+                            break;
+                        default:
+                            Debug.WriteLine("Modo de búsqueda inválido!!!");
+                            break;
+                    }
+
                     _personas = faceDetections.Count;
                     if (_useGenderDetection)
                     {
-                        var genderPredictions = _genderDetector.FindGender(image, faceDetections, draw: _showROI);
-                        if (_useSkin || _useMotion)
+                        try
                         {
-                            AplicarHistoria(_tracker, genderPredictions);
-                        }
+                            var genderPredictions = _genderDetector.FindGender(image, faceDetections,_showGender,_showGenderConfidence);
+                            if (_useSkin || _useMotion)
+                            {
+                                AplicarMomento(_tracker, genderPredictions);
+                            }
 
-                        MostrarCaras(genderCopy, genderPredictions);
+                            MostrarCaras(genderCopy, genderPredictions);
+                        }
+                        catch (Exception ex)
+                        {
+
+                            Debug.WriteLine(ex );
+                        }
                     }
                     genderCopy.Dispose();
 
 
-                    //
-
-
-                    /*foreach (var pair in blobs)
-                                    {
-                                        //CvTrack b = pair.Value;
-                                        CvBlob b = pair.Value;
-
-                                        CvInvoke.Rectangle(image.Mat, b.BoundingBox, SCALAR_BLUE, 1);
-                                        CvInvoke.PutText(image.Mat, b.Id.ToString(),
-                                            new Point((int) Math.Round(b.Centroid.X), (int) Math.Round(b.Centroid.Y)), FontFace.HersheyPlain,
-                                            1.0, new MCvScalar(255.0, 255.0, 255.0));
-
-                                        //Point p3 = new Point((int) Math.Round(b.Centroid.X), (int) Math.Round(b.Centroid.Y));
-                                        //CvInvoke.Circle(image.Mat, p3, 3, SCALAR_GREEN, 3);
-                                    }*/
-
                     foreach (var rec in skinRecs)
                     {
-                        CvInvoke.Rectangle(image.Mat, rec, SCALAR_GREEN, 1);
+                        if (_showObjects)
+                        {
+                            CvInvoke.Rectangle(image.Mat, rec, SCALAR_GREEN, 1);
+                        }
                     }
                     // display tracker 
                     foreach (var pair in _tracker)
                     {
                         CvTrack b = pair.Value;
 
-                        //CvInvoke.Rectangle(image.Mat, b.BoundingBox, SCALAR_BLUE, 1);
                         if (_showObjects)
                         {
-                            CvInvoke.PutText(image.Mat, b.Id.ToString(),
-    new Point((int)Math.Round(b.Centroid.X), (int)Math.Round(b.Centroid.Y)), FontFace.HersheyPlain,
-    1.0, new MCvScalar(255.0, 255.0, 255.0));
+                            CvInvoke.PutText(image.Mat, b.Id.ToString(), new Point((int)Math.Round(b.Centroid.X), 
+                                (int)Math.Round(b.Centroid.Y)), FontFace.HersheyPlain,1.0, new MCvScalar(255.0, 255.0, 255.0));
 
                             Point p3 = new Point((int)Math.Round(b.Centroid.X), (int)Math.Round(b.Centroid.Y));
                             CvInvoke.Circle(image.Mat, p3, 3, SCALAR_GREEN, 3);
@@ -518,34 +561,40 @@ namespace ContarPersonas2
         /// Thread safe method to display image in a picturebox  
         /// </summary>
         /// <param name="Image"></param>
-        private void DisplayImage(IImage Image,int personas)
+        private void DisplayImage(IImage Image, int personas)
         {
-            this.Invoke(new Action(() =>
+            try
             {
-                try
+                this.Invoke(new Action(() =>
                 {
-                    imageBox.Image = Image;
-                    txtCantidad.Text = personas.ToString();
-                    _cont++;
-                    if (_capture != null && _capture.Ptr != IntPtr.Zero)
+                    try
                     {
-                        TimeSpan pos = TimeSpan.FromMilliseconds((long)_capture.GetCaptureProperty(CapProp.PosMsec));
-                        lblFps.Text = String.Format("{0}x{1} {2:0.00} fps", _frameSize.Width, _frameSize.Height,
-                            1000 * _cont / (double) _timeSinceStart.ElapsedMilliseconds );
-                        lblPos.Text = String.Format("Pos: {0:hh\\:mm\\:ss}",pos);
-                    }
+                        imageBox.Image = Image;
+                        txtCantidad.Text = personas.ToString();
+                        _cont++;
+                        if (_capture != null && _capture.Ptr != IntPtr.Zero)
+                        {
+                            TimeSpan pos = TimeSpan.FromMilliseconds((long) _capture.GetCaptureProperty(CapProp.PosMsec));
+                            lblFps.Text = String.Format("{0}x{1} {2:0.00} fps", _frameSize.Width, _frameSize.Height,
+                                1000 * _cont / (double) _timeSinceStart.ElapsedMilliseconds);
+                            lblPos.Text = String.Format("Pos: {0:hh\\:mm\\:ss}", pos);
+                        }
 
-                    if (_timeSinceStart.ElapsedMilliseconds > 5000)
-                    {
-                        _timeSinceStart.Restart();
-                        _cont = 0;
+                        if (_timeSinceStart.ElapsedMilliseconds > 5000)
+                        {
+                            _timeSinceStart.Restart();
+                            _cont = 0;
+                        }
                     }
-                }
-                catch (Exception ex)
-                {
-                    Debug.WriteLine(ex);
-                }
-            }));
+                    catch (Exception ex)
+                    {
+                        Debug.WriteLine(ex);
+                    }
+                }));
+            }
+            catch (ObjectDisposedException disEx)
+            {
+            }
         }
 
         private void btArchivo_Click(object sender, EventArgs e)
@@ -575,7 +624,6 @@ namespace ContarPersonas2
         /// Convert the coordinates for the image's SizeMode.
         /// </summary>
         /// https://www.codeproject.com/script/articles/view.aspx?aid=859100
-        /// http://csharphelper.com/blog/2014/10/select-parts-of-a-scaled-image-picturebox-different-sizemode-values-c/</a>
         /// http://csharphelper.com/blog/2014/10/select-parts-of-a-scaled-image-picturebox-different-sizemode-values-c/</a>
         /// <param name="pic"></param>
         /// <param name="X0">out X coordinate</param>
@@ -686,6 +734,7 @@ namespace ContarPersonas2
 
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
         {
+            SaveMRU();
             Debug.WriteLine(e.CloseReason);
             StopCapture();
         }
@@ -696,10 +745,12 @@ namespace ContarPersonas2
             {
                 try
                 {
-                    _capture.ImageGrabbed -= ProcessFrame;
- 
+                    _capture.ImageGrabbed -= ProcessFrame; // quito el handler
+                    Thread.Sleep(100); // para estar seguro que haya terminado el procesamiento
                     _capture.Stop();
+                    _contar.DisposeCascades();
                     _capture.Dispose();
+
                 }
                 catch (Exception ex)
                 {
@@ -749,6 +800,11 @@ namespace ContarPersonas2
         private void Form1_Load(object sender, EventArgs e)
         {
             CargarModelosGenero();
+            comboBox1.SelectedIndex = 0;
+            cboxResBodies.SelectedIndex = 2;
+            cboxResFaces.SelectedIndex = 1;
+            trackBar1.Value = _precision;
+            LoadMRU();
         }
 
         private void cboxGeneroModelo_SelectedIndexChanged(object sender, EventArgs e)
@@ -826,6 +882,96 @@ namespace ContarPersonas2
         private void ckShowCenters_CheckedChanged(object sender, EventArgs e)
         {
             _showObjects = ckShowCenters.Checked;
+        }
+
+        private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (comboBox1.SelectedIndex > -1)
+            {
+                _modoBusqueda = comboBox1.SelectedIndex;
+                if (_modoBusqueda == 0)
+                {
+                    ckUseGender.Enabled = true;
+                    _useGenderDetection = ckUseGender.Checked;
+                }
+                else
+                {
+                    ckUseGender.Enabled = false;
+                    _useGenderDetection = false;
+                }
+
+
+                if (_modoBusqueda < 2)
+                {
+                    ckMotion.Enabled = ckSkin.Enabled = true;
+                }
+                else
+                {
+                    ckMotion.Enabled = ckSkin.Enabled = false;
+                    ckUseGender.Enabled = false;
+                }
+            }
+        }
+
+        private void trackBar1_ValueChanged(object sender, EventArgs e)
+        {
+            lblPrecision.Text = trackBar1.Value.ToString();
+            _precision = trackBar1.Value;
+
+        }
+
+        private double[] _resoluciones = {1.0, 0.75, 0.5,0.33,0.25};
+
+        private void ConfigRes()
+        {
+            if (_contar != null && cboxResFaces.SelectedIndex > -1)
+            {
+                _contar.ResizeFactorFaces = _resoluciones[cboxResFaces.SelectedIndex];
+                Debug.WriteLine("Nueva res caras: " + _resoluciones[cboxResFaces.SelectedIndex]);
+            }
+            if (_contar != null && cboxResBodies.SelectedIndex > -1)
+            {
+                _contar.ResizeFactorBodies = _resoluciones[cboxResBodies.SelectedIndex];
+                Debug.WriteLine("Nueva res cuerpos: " + _resoluciones[cboxResBodies.SelectedIndex]);
+            }
+        }
+
+        private void cboxResFaces_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+            ConfigRes();
+        }
+
+        private void cboxResBodies_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            ConfigRes();
+        }
+
+        private void trackBar2_ValueChanged(object sender, EventArgs e)
+        {
+            if (_contar != null)
+            {
+                _contar.DetectionKeepTime = trackBar2.Value;
+            }
+            lblKeep.Text = trackBar2.Value + " frames";
+        }
+
+        private void ckShowHaar_CheckedChanged(object sender, EventArgs e)
+        {
+            if (_contar != null)
+            {
+                _contar.ColorHaarCascade = ckShowHaar.Checked;
+            }
+        }
+
+        private void ckShowGender_CheckedChanged(object sender, EventArgs e)
+        {
+            _showGender = ckShowGender.Checked;
+        }
+
+        private void ckShowGenConfidence_CheckedChanged(object sender, EventArgs e)
+        {
+            _showGenderConfidence = ckShowGenConfidence.Checked;
         }
     }
 }

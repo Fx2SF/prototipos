@@ -1,6 +1,6 @@
-Size;200;240;  // ancho, alto
+Size;160;200;  // ancho, alto
 Bias;0;0; // clase y offset del sesgo
 Uncertain;0;0; // para masculino
 Uncertain;1;0; // para femenino
-MarginX;80; // margen ancho cara 
-MarginY;80; // margen alto cara
+MarginX;0; // margen ancho cara 
+MarginY;0; // margen alto cara
