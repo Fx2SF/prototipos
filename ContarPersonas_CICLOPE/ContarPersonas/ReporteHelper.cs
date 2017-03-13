@@ -42,7 +42,8 @@ namespace ContarPersonas
 
         public void IniciarTabla(params string[] headers)
         {
-            writer.WriteLine("<style>\ntable td, table th { border: 1px solid black; }");
+            writer.WriteLine("<style>\ntd, th { border: 1px solid black; padding-left: 0.5em; padding-right: 0.5em }");
+            writer.WriteLine(".imagen_td {padding: 0}\n");
             writer.WriteLine("img {width: 320px}\n</style>");
             writer.WriteLine("<h1>Reporte</h1>");
             writer.WriteLine("<table>");
@@ -68,7 +69,7 @@ namespace ContarPersonas
             CrearNuevaFila();
             string directory = Path.GetFileName(Path.GetDirectoryName(jpgFilename));
             sb.AppendLine(String.Format(
-                "<td><a href='{0}' target='_blank'><img src='{0}' alt={1}></a></td>",
+                "<td class='imagen_td'><a href='{0}' target='_blank'><img src='{0}' alt={1}></a></td>",
                 directory + "\\" + Path.GetFileName(jpgFilename),
                 "frame " + timestamp));
         }
@@ -77,7 +78,17 @@ namespace ContarPersonas
         {
             foreach (object x in data)
             {
-                sb.AppendLine(String.Format("<td>{0}</td>", x));
+                if (x is TimeSpan)
+                {
+                    var ts = x as TimeSpan?;
+                    var str1 = ts.Value.ToString("h\\:mm\\:ss");
+                    sb.AppendLine(String.Format("<td>{0} - {1}s</td>", str1, (int)ts.Value.TotalSeconds));
+                }
+                else
+                {
+                    sb.AppendLine(String.Format("<td>{0}</td>", x));
+                }
+
             }
         }
 

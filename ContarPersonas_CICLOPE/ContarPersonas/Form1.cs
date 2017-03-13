@@ -124,7 +124,10 @@ namespace ContarPersonas
             pickerInicio.Value = DateTime.Today;
             pickerFin.Value = DateTime.Today;
             var cascade = Directory.GetFiles(Application.StartupPath, "haar*.xml", SearchOption.TopDirectoryOnly).Select(p => Path.GetFileName(p));
+            comboCascade.Items.Add("Profile+Alt2+Def");
+            comboCascade.Items.Add("Profile+Alt2");
             comboCascade.Items.Add("Face+Body");
+            comboCascade.Items.Add("HOG");
             comboCascade.Items.AddRange(cascade.ToArray<object>());
             comboCascade.SelectedIndex = 0;
             comboScaleFactor.SelectedIndex = 0;

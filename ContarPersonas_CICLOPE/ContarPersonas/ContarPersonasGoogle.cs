@@ -214,7 +214,7 @@ namespace ContarPersonas
             int totalFaces = response.FaceAnnotations?.Count ?? 0;
 
             reporte.AgregarImagen(info.FileName, timestamp);
-            reporte.AgregarCeldas(info.Id, timestamp, totalFaces);
+            reporte.AgregarCeldas(info.Id, info.TimeStamp, totalFaces);
             reporte.FinalizarFila();
 
             processedFrames++;

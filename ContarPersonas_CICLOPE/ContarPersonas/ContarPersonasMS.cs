@@ -161,7 +161,7 @@ namespace ContarPersonas
 
                 ReporteHelper rep = new ReporteHelper();
                 rep.AgregarImagen(fileName, timestamp);
-                rep.AgregarCeldas(info.Id, timestamp, totalFaces, males, females, otros);
+                rep.AgregarCeldas(info.Id, info.TimeStamp, totalFaces, males, females, otros);
                 textos.TryAdd(info.Id, rep.ObtenerFila());
             }
         }
