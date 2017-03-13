@@ -839,6 +839,7 @@ namespace CuentaPersonas
         private Point _p2_tmp = new Point(-1,-1);
         private void imageBox1_Click(object sender, EventArgs e)
         {
+            // Nota: parece no ser preciso cuando se maximiza la ventana, funciona bien sin maximizar
 
             MouseEventArgs mouse = e as MouseEventArgs;
             if (mouse != null && _seleccionPuntos > 0)
@@ -930,6 +931,24 @@ namespace CuentaPersonas
                     _p2_tmp = new Point(_p1_tmp.X, py);
                 }
 
+            }
+        }
+
+        private void btKey_Click(object sender, EventArgs e)
+        {
+            if (txtKey.Text.Trim().Length == 32)
+            {
+                if (MessageBox.Show(this, "Desea cambiar la clave actual?","Cambiar clave?",MessageBoxButtons.OKCancel,MessageBoxIcon.Warning) == DialogResult.OK)
+                {
+                    Properties.Settings.Default.MS_Key = txtKey.Text.Trim();
+                    Properties.Settings.Default.Save();
+                    MessageBox.Show(this, "Clave cambiada.\nTendrá efecto (para el usuario actual) al reiniciar el programa.", "Clave cambiada.", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    txtKey.Clear();
+                }
+            }
+            else
+            {
+                MessageBox.Show(this,"La clave debe tener 32 caracteres.","Clave inválida",MessageBoxButtons.OK,MessageBoxIcon.Error);
             }
         }
     }

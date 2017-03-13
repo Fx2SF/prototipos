@@ -29,13 +29,21 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle21 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle22 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle23 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle24 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle7 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle8 = new System.Windows.Forms.DataGridViewCellStyle();
             this.imageBox1 = new Emgu.CV.UI.ImageBox();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.btPuntos = new System.Windows.Forms.Button();
+            this.gridB = new System.Windows.Forms.DataGridView();
+            this.dataGridViewImageColumn1 = new System.Windows.Forms.DataGridViewImageColumn();
+            this.dataGridViewTextBoxColumn1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.gridA = new System.Windows.Forms.DataGridView();
+            this.colImg = new System.Windows.Forms.DataGridViewImageColumn();
+            this.Analisis = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.checkBox1 = new System.Windows.Forms.CheckBox();
             this.buttonComenzar = new System.Windows.Forms.Button();
             this.buttonParar = new System.Windows.Forms.Button();
             this.labelSalieron = new System.Windows.Forms.Label();
@@ -124,6 +132,8 @@
             this.textX1 = new System.Windows.Forms.TextBox();
             this.tabPage5 = new System.Windows.Forms.TabPage();
             this.groupBox15 = new System.Windows.Forms.GroupBox();
+            this.cboxMantener = new System.Windows.Forms.ComboBox();
+            this.ckMantenerImg = new System.Windows.Forms.CheckBox();
             this.label31 = new System.Windows.Forms.Label();
             this.numMaxAreaScale = new System.Windows.Forms.NumericUpDown();
             this.label30 = new System.Windows.Forms.Label();
@@ -132,19 +142,15 @@
             this.label29 = new System.Windows.Forms.Label();
             this.label28 = new System.Windows.Forms.Label();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
-            this.ckMantenerImg = new System.Windows.Forms.CheckBox();
-            this.checkBox1 = new System.Windows.Forms.CheckBox();
-            this.gridA = new System.Windows.Forms.DataGridView();
-            this.gridB = new System.Windows.Forms.DataGridView();
-            this.dataGridViewImageColumn1 = new System.Windows.Forms.DataGridViewImageColumn();
-            this.dataGridViewTextBoxColumn1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.colImg = new System.Windows.Forms.DataGridViewImageColumn();
-            this.Analisis = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.cboxMantener = new System.Windows.Forms.ComboBox();
-            this.btPuntos = new System.Windows.Forms.Button();
+            this.btKey = new System.Windows.Forms.Button();
+            this.txtKey = new System.Windows.Forms.TextBox();
+            this.groupBox16 = new System.Windows.Forms.GroupBox();
+            this.label32 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.imageBox1)).BeginInit();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.gridB)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.gridA)).BeginInit();
             this.tabPage4.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.imageBox2)).BeginInit();
             this.tabPage2.SuspendLayout();
@@ -167,8 +173,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.numMaxAreaScale)).BeginInit();
             this.tabPage3.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.gridA)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.gridB)).BeginInit();
+            this.groupBox16.SuspendLayout();
             this.SuspendLayout();
             // 
             // imageBox1
@@ -223,6 +228,123 @@
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "Video";
             this.tabPage1.UseVisualStyleBackColor = true;
+            // 
+            // btPuntos
+            // 
+            this.btPuntos.Location = new System.Drawing.Point(758, 12);
+            this.btPuntos.Name = "btPuntos";
+            this.btPuntos.Size = new System.Drawing.Size(134, 23);
+            this.btPuntos.TabIndex = 15;
+            this.btPuntos.Text = "Elegir nuevos puntos";
+            this.btPuntos.UseVisualStyleBackColor = true;
+            this.btPuntos.Click += new System.EventHandler(this.btPuntos_Click);
+            // 
+            // gridB
+            // 
+            this.gridB.AllowUserToAddRows = false;
+            this.gridB.AllowUserToDeleteRows = false;
+            this.gridB.AllowUserToResizeColumns = false;
+            this.gridB.AllowUserToResizeRows = false;
+            dataGridViewCellStyle5.SelectionBackColor = System.Drawing.SystemColors.MenuHighlight;
+            this.gridB.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle5;
+            this.gridB.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.gridB.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.AllCellsExceptHeaders;
+            this.gridB.BackgroundColor = System.Drawing.SystemColors.Window;
+            this.gridB.CellBorderStyle = System.Windows.Forms.DataGridViewCellBorderStyle.None;
+            this.gridB.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.gridB.ColumnHeadersVisible = false;
+            this.gridB.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.dataGridViewImageColumn1,
+            this.dataGridViewTextBoxColumn1});
+            dataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle6.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle6.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle6.ForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle6.SelectionBackColor = System.Drawing.SystemColors.MenuHighlight;
+            dataGridViewCellStyle6.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle6.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.gridB.DefaultCellStyle = dataGridViewCellStyle6;
+            this.gridB.Location = new System.Drawing.Point(1018, 85);
+            this.gridB.Name = "gridB";
+            this.gridB.RowHeadersVisible = false;
+            this.gridB.Size = new System.Drawing.Size(187, 322);
+            this.gridB.TabIndex = 14;
+            // 
+            // dataGridViewImageColumn1
+            // 
+            this.dataGridViewImageColumn1.HeaderText = "Img";
+            this.dataGridViewImageColumn1.ImageLayout = System.Windows.Forms.DataGridViewImageCellLayout.Stretch;
+            this.dataGridViewImageColumn1.Name = "dataGridViewImageColumn1";
+            this.dataGridViewImageColumn1.Width = 75;
+            // 
+            // dataGridViewTextBoxColumn1
+            // 
+            this.dataGridViewTextBoxColumn1.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCellsExceptHeader;
+            this.dataGridViewTextBoxColumn1.HeaderText = "Analisis";
+            this.dataGridViewTextBoxColumn1.Name = "dataGridViewTextBoxColumn1";
+            this.dataGridViewTextBoxColumn1.Width = 5;
+            // 
+            // gridA
+            // 
+            this.gridA.AllowUserToAddRows = false;
+            this.gridA.AllowUserToDeleteRows = false;
+            this.gridA.AllowUserToResizeColumns = false;
+            this.gridA.AllowUserToResizeRows = false;
+            dataGridViewCellStyle7.SelectionBackColor = System.Drawing.SystemColors.MenuHighlight;
+            this.gridA.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle7;
+            this.gridA.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.gridA.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.AllCellsExceptHeaders;
+            this.gridA.BackgroundColor = System.Drawing.SystemColors.Window;
+            this.gridA.CellBorderStyle = System.Windows.Forms.DataGridViewCellBorderStyle.None;
+            this.gridA.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.gridA.ColumnHeadersVisible = false;
+            this.gridA.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.colImg,
+            this.Analisis});
+            dataGridViewCellStyle8.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle8.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle8.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle8.ForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle8.SelectionBackColor = System.Drawing.SystemColors.MenuHighlight;
+            dataGridViewCellStyle8.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle8.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.gridA.DefaultCellStyle = dataGridViewCellStyle8;
+            this.gridA.Location = new System.Drawing.Point(822, 85);
+            this.gridA.Name = "gridA";
+            this.gridA.RowHeadersVisible = false;
+            this.gridA.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.gridA.Size = new System.Drawing.Size(187, 322);
+            this.gridA.TabIndex = 13;
+            // 
+            // colImg
+            // 
+            this.colImg.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCellsExceptHeader;
+            this.colImg.HeaderText = "Img";
+            this.colImg.ImageLayout = System.Windows.Forms.DataGridViewImageCellLayout.Stretch;
+            this.colImg.Name = "colImg";
+            this.colImg.Width = 5;
+            // 
+            // Analisis
+            // 
+            this.Analisis.HeaderText = "Analisis";
+            this.Analisis.Name = "Analisis";
+            this.Analisis.Width = 50;
+            // 
+            // checkBox1
+            // 
+            this.checkBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.checkBox1.AutoSize = true;
+            this.checkBox1.Checked = true;
+            this.checkBox1.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.checkBox1.Location = new System.Drawing.Point(930, 38);
+            this.checkBox1.Name = "checkBox1";
+            this.checkBox1.Size = new System.Drawing.Size(121, 17);
+            this.checkBox1.TabIndex = 12;
+            this.checkBox1.Text = "Activar Gender/Age";
+            this.checkBox1.UseVisualStyleBackColor = true;
+            this.checkBox1.CheckedChanged += new System.EventHandler(this.checkBox1_CheckedChanged_1);
             // 
             // buttonComenzar
             // 
@@ -1058,6 +1180,7 @@
             // 
             // tabPage5
             // 
+            this.tabPage5.Controls.Add(this.groupBox16);
             this.tabPage5.Controls.Add(this.groupBox15);
             this.tabPage5.Location = new System.Drawing.Point(4, 22);
             this.tabPage5.Name = "tabPage5";
@@ -1076,10 +1199,34 @@
             this.groupBox15.Controls.Add(this.richTextBox1);
             this.groupBox15.Location = new System.Drawing.Point(27, 29);
             this.groupBox15.Name = "groupBox15";
-            this.groupBox15.Size = new System.Drawing.Size(312, 347);
+            this.groupBox15.Size = new System.Drawing.Size(312, 349);
             this.groupBox15.TabIndex = 0;
             this.groupBox15.TabStop = false;
             this.groupBox15.Text = "Gender/Age";
+            // 
+            // cboxMantener
+            // 
+            this.cboxMantener.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cboxMantener.FormattingEnabled = true;
+            this.cboxMantener.Items.AddRange(new object[] {
+            "Con rostros",
+            "Todas"});
+            this.cboxMantener.Location = new System.Drawing.Point(147, 28);
+            this.cboxMantener.Name = "cboxMantener";
+            this.cboxMantener.Size = new System.Drawing.Size(121, 21);
+            this.cboxMantener.TabIndex = 6;
+            this.cboxMantener.SelectedIndexChanged += new System.EventHandler(this.cboxMantener_SelectedIndexChanged);
+            // 
+            // ckMantenerImg
+            // 
+            this.ckMantenerImg.AutoSize = true;
+            this.ckMantenerImg.Location = new System.Drawing.Point(22, 30);
+            this.ckMantenerImg.Name = "ckMantenerImg";
+            this.ckMantenerImg.Size = new System.Drawing.Size(119, 17);
+            this.ckMantenerImg.TabIndex = 5;
+            this.ckMantenerImg.Text = "Mantener imágenes";
+            this.ckMantenerImg.UseVisualStyleBackColor = true;
+            this.ckMantenerImg.CheckedChanged += new System.EventHandler(this.ckMantenerImg_CheckedChanged);
             // 
             // label31
             // 
@@ -1166,146 +1313,44 @@
             this.pictureBox1.TabIndex = 0;
             this.pictureBox1.TabStop = false;
             // 
-            // ckMantenerImg
+            // btKey
             // 
-            this.ckMantenerImg.AutoSize = true;
-            this.ckMantenerImg.Location = new System.Drawing.Point(22, 30);
-            this.ckMantenerImg.Name = "ckMantenerImg";
-            this.ckMantenerImg.Size = new System.Drawing.Size(119, 17);
-            this.ckMantenerImg.TabIndex = 5;
-            this.ckMantenerImg.Text = "Mantener imágenes";
-            this.ckMantenerImg.UseVisualStyleBackColor = true;
-            this.ckMantenerImg.CheckedChanged += new System.EventHandler(this.ckMantenerImg_CheckedChanged);
+            this.btKey.Location = new System.Drawing.Point(41, 60);
+            this.btKey.Name = "btKey";
+            this.btKey.Size = new System.Drawing.Size(183, 23);
+            this.btKey.TabIndex = 7;
+            this.btKey.Text = "Cambiar Microsoft Vision API Key";
+            this.btKey.UseVisualStyleBackColor = true;
+            this.btKey.Click += new System.EventHandler(this.btKey_Click);
             // 
-            // checkBox1
+            // txtKey
             // 
-            this.checkBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.checkBox1.AutoSize = true;
-            this.checkBox1.Checked = true;
-            this.checkBox1.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.checkBox1.Location = new System.Drawing.Point(930, 38);
-            this.checkBox1.Name = "checkBox1";
-            this.checkBox1.Size = new System.Drawing.Size(121, 17);
-            this.checkBox1.TabIndex = 12;
-            this.checkBox1.Text = "Activar Gender/Age";
-            this.checkBox1.UseVisualStyleBackColor = true;
-            this.checkBox1.CheckedChanged += new System.EventHandler(this.checkBox1_CheckedChanged_1);
+            this.txtKey.Location = new System.Drawing.Point(83, 25);
+            this.txtKey.MaxLength = 32;
+            this.txtKey.Name = "txtKey";
+            this.txtKey.Size = new System.Drawing.Size(183, 20);
+            this.txtKey.TabIndex = 8;
             // 
-            // gridA
+            // groupBox16
             // 
-            this.gridA.AllowUserToAddRows = false;
-            this.gridA.AllowUserToDeleteRows = false;
-            this.gridA.AllowUserToResizeColumns = false;
-            this.gridA.AllowUserToResizeRows = false;
-            dataGridViewCellStyle21.SelectionBackColor = System.Drawing.SystemColors.MenuHighlight;
-            this.gridA.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle21;
-            this.gridA.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.gridA.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.AllCellsExceptHeaders;
-            this.gridA.BackgroundColor = System.Drawing.SystemColors.Window;
-            this.gridA.CellBorderStyle = System.Windows.Forms.DataGridViewCellBorderStyle.None;
-            this.gridA.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.gridA.ColumnHeadersVisible = false;
-            this.gridA.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.colImg,
-            this.Analisis});
-            dataGridViewCellStyle22.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle22.BackColor = System.Drawing.SystemColors.Window;
-            dataGridViewCellStyle22.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle22.ForeColor = System.Drawing.SystemColors.ControlText;
-            dataGridViewCellStyle22.SelectionBackColor = System.Drawing.SystemColors.MenuHighlight;
-            dataGridViewCellStyle22.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle22.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.gridA.DefaultCellStyle = dataGridViewCellStyle22;
-            this.gridA.Location = new System.Drawing.Point(822, 85);
-            this.gridA.Name = "gridA";
-            this.gridA.RowHeadersVisible = false;
-            this.gridA.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.gridA.Size = new System.Drawing.Size(187, 322);
-            this.gridA.TabIndex = 13;
+            this.groupBox16.Controls.Add(this.label32);
+            this.groupBox16.Controls.Add(this.txtKey);
+            this.groupBox16.Controls.Add(this.btKey);
+            this.groupBox16.Location = new System.Drawing.Point(360, 29);
+            this.groupBox16.Name = "groupBox16";
+            this.groupBox16.Size = new System.Drawing.Size(276, 101);
+            this.groupBox16.TabIndex = 1;
+            this.groupBox16.TabStop = false;
+            this.groupBox16.Text = "Cambiar Microsoft Vision API Key";
             // 
-            // gridB
+            // label32
             // 
-            this.gridB.AllowUserToAddRows = false;
-            this.gridB.AllowUserToDeleteRows = false;
-            this.gridB.AllowUserToResizeColumns = false;
-            this.gridB.AllowUserToResizeRows = false;
-            dataGridViewCellStyle23.SelectionBackColor = System.Drawing.SystemColors.MenuHighlight;
-            this.gridB.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle23;
-            this.gridB.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.gridB.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.AllCellsExceptHeaders;
-            this.gridB.BackgroundColor = System.Drawing.SystemColors.Window;
-            this.gridB.CellBorderStyle = System.Windows.Forms.DataGridViewCellBorderStyle.None;
-            this.gridB.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.gridB.ColumnHeadersVisible = false;
-            this.gridB.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.dataGridViewImageColumn1,
-            this.dataGridViewTextBoxColumn1});
-            dataGridViewCellStyle24.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle24.BackColor = System.Drawing.SystemColors.Window;
-            dataGridViewCellStyle24.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle24.ForeColor = System.Drawing.SystemColors.ControlText;
-            dataGridViewCellStyle24.SelectionBackColor = System.Drawing.SystemColors.MenuHighlight;
-            dataGridViewCellStyle24.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle24.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.gridB.DefaultCellStyle = dataGridViewCellStyle24;
-            this.gridB.Location = new System.Drawing.Point(1018, 85);
-            this.gridB.Name = "gridB";
-            this.gridB.RowHeadersVisible = false;
-            this.gridB.Size = new System.Drawing.Size(187, 322);
-            this.gridB.TabIndex = 14;
-            // 
-            // dataGridViewImageColumn1
-            // 
-            this.dataGridViewImageColumn1.HeaderText = "Img";
-            this.dataGridViewImageColumn1.ImageLayout = System.Windows.Forms.DataGridViewImageCellLayout.Stretch;
-            this.dataGridViewImageColumn1.Name = "dataGridViewImageColumn1";
-            this.dataGridViewImageColumn1.Width = 75;
-            // 
-            // dataGridViewTextBoxColumn1
-            // 
-            this.dataGridViewTextBoxColumn1.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCellsExceptHeader;
-            this.dataGridViewTextBoxColumn1.HeaderText = "Analisis";
-            this.dataGridViewTextBoxColumn1.Name = "dataGridViewTextBoxColumn1";
-            this.dataGridViewTextBoxColumn1.Width = 5;
-            // 
-            // colImg
-            // 
-            this.colImg.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCellsExceptHeader;
-            this.colImg.HeaderText = "Img";
-            this.colImg.ImageLayout = System.Windows.Forms.DataGridViewImageCellLayout.Stretch;
-            this.colImg.Name = "colImg";
-            this.colImg.Width = 5;
-            // 
-            // Analisis
-            // 
-            this.Analisis.HeaderText = "Analisis";
-            this.Analisis.Name = "Analisis";
-            this.Analisis.Width = 50;
-            // 
-            // cboxMantener
-            // 
-            this.cboxMantener.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cboxMantener.FormattingEnabled = true;
-            this.cboxMantener.Items.AddRange(new object[] {
-            "Con rostros",
-            "Todas"});
-            this.cboxMantener.Location = new System.Drawing.Point(147, 28);
-            this.cboxMantener.Name = "cboxMantener";
-            this.cboxMantener.Size = new System.Drawing.Size(121, 21);
-            this.cboxMantener.TabIndex = 6;
-            this.cboxMantener.SelectedIndexChanged += new System.EventHandler(this.cboxMantener_SelectedIndexChanged);
-            // 
-            // btPuntos
-            // 
-            this.btPuntos.Location = new System.Drawing.Point(758, 12);
-            this.btPuntos.Name = "btPuntos";
-            this.btPuntos.Size = new System.Drawing.Size(134, 23);
-            this.btPuntos.TabIndex = 15;
-            this.btPuntos.Text = "Elegir nuevos puntos";
-            this.btPuntos.UseVisualStyleBackColor = true;
-            this.btPuntos.Click += new System.EventHandler(this.btPuntos_Click);
+            this.label32.AutoSize = true;
+            this.label32.Location = new System.Drawing.Point(6, 28);
+            this.label32.Name = "label32";
+            this.label32.Size = new System.Drawing.Size(71, 13);
+            this.label32.TabIndex = 9;
+            this.label32.Text = "Nueva clave:";
             // 
             // Inicio
             // 
@@ -1319,6 +1364,8 @@
             this.tabControl1.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
             this.tabPage1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.gridB)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.gridA)).EndInit();
             this.tabPage4.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.imageBox2)).EndInit();
             this.tabPage2.ResumeLayout(false);
@@ -1354,8 +1401,8 @@
             this.tabPage3.ResumeLayout(false);
             this.tabPage3.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.gridA)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.gridB)).EndInit();
+            this.groupBox16.ResumeLayout(false);
+            this.groupBox16.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -1471,6 +1518,10 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn Analisis;
         private System.Windows.Forms.ComboBox cboxMantener;
         private System.Windows.Forms.Button btPuntos;
+        private System.Windows.Forms.Button btKey;
+        private System.Windows.Forms.GroupBox groupBox16;
+        private System.Windows.Forms.Label label32;
+        private System.Windows.Forms.TextBox txtKey;
     }
 }
 

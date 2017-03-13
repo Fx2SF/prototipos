@@ -17,8 +17,9 @@ namespace CuentaPersonas
 
         public CognitiveService()
         {
-
-            string api = "912104c5a65c444089b5ed0e6d358dff";//"8b2d73635e3849efac561f4e8c8290be";
+            //"8b2d73635e3849efac561f4e8c8290be";
+            // 912104c5a65c444089b5ed0e6d358dff
+            string api = Properties.Settings.Default.MS_Key;
             visionClient = new VisionServiceClient(api);
 
         }
